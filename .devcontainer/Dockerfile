@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     sudo \
     git \
     qtdeclarative5-dev \
+    python3-pip \
+    python3-dev \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-nav2-bringup \
     ros-${ROS_DISTRO}-slam-toolbox \
@@ -46,3 +48,7 @@ WORKDIR /home/$USERNAME/colcon_ws/src
 
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git
+RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
+
+# Install python packages
+RUN pip3 install -U pymodbus
