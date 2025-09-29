@@ -42,6 +42,7 @@ RUN rosdep update
 
 # Source the ROS setup file
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
+RUN echo "export PYTHONPATH=\"${PYTHONPATH}:/home/ubuntu/colcon_ws/install\"" >> ~/.bashrc
 
 # make sure folders exist
 WORKDIR /home/$USERNAME/colcon_ws/src 
@@ -51,4 +52,4 @@ RUN git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 
 # Install python packages
-RUN pip3 install -U pymodbus
+RUN pip3 install --no-cache-dir pymodbus
