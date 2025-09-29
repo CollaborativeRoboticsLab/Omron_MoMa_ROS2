@@ -6,6 +6,7 @@ This repository allows controlling the Base and Arm of the Omron Mobile Manipula
 
 - [omron_arm](https://github.com/CollaborativeRoboticsLab/omron_arm) package 
 - [omron_base](https://github.com/CollaborativeRoboticsLab/omron_base) package
+- [omron_gripper](https://github.com/CollaborativeRoboticsLab/omron_gripper.git)
 
 For supported features and limitations, see the individual repositories on the features supported by the MoMa.
 
@@ -22,13 +23,17 @@ Install dependencies
 ```sh
 sudo apt install ros-humble-moveit ros-humble-controller-manager ros-humble-joint-trajectory-controller ros-humble-joint-state-broadcaster ros-humble-rmw-cyclonedds-cpp ros-humble-joint-state-publisher ros-humble-joint-state-publisher-gui ros-humble-vision-opencv ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-slam-toolbox
 ```
+```sh
+pip install pymodbus
+```
 
 Clone the repositories into the `src` folder by
 
 ```sh
 git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git
 git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
-git clone https://github.com/CollaborativeRoboticsLab/omron_mobile_manipulator.git
+git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
+git clone https://github.com/CollaborativeRoboticsLab/omron_moma.git
 ```
 
 finally build by
@@ -45,8 +50,8 @@ colcon build
 Clone this reposiotory
 
 ```bash
-git clone https://github.com/CollaborativeRoboticsLab/Omron_MoMa_ROS2.git 
-cd Omron_MoMa_ROS2/docker
+git clone https://github.com/CollaborativeRoboticsLab/omron_moma.git 
+cd omron_moma/docker
 ```
 
 Pull the Docker image and start compose (No need to run `docker compose build`)

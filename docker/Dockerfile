@@ -18,7 +18,7 @@ ENV WORKSPACE_ROOT=/omron_ws
 #############################################################################################################################
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     python3-pip \
     python3-colcon-common-extensions \
@@ -36,8 +36,10 @@ RUN apt-get update && apt-get install -y \
     ros-humble-joint-state-publisher-gui \
     ros-humble-vision-opencv
 
-
 RUN apt-get clean
+
+# Install python packages
+RUN pip3 install --no-cache-dir pymodbus
 
 #############################################################################################################################
 #####
@@ -51,6 +53,7 @@ WORKDIR ${WORKSPACE_ROOT}/src
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_moma.git
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git 
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
+RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 
 WORKDIR ${WORKSPACE_ROOT}
 
