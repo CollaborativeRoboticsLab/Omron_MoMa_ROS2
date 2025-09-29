@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ld250_tm12x">
+
+  <!-- Arguments -->
+  <xacro:arg name="ns" default=""/>
+  <xacro:arg name="arm_prefix" default="tm_"/>
+  <xacro:arg name="base_prefix" default=""/>
+  <xacro:arg name="arm_color" default="none"/>
+  <xacro:arg name="trans_hw_iface" default="hardware_interface/PositionJointInterface"/>
+  <xacro:arg name="arm_mount_xyz" default="0 0 0"/>
+  <xacro:arg name="arm_mount_rpy" default="0 0 0"/>
+  <!-- If the TM base link name differs, change this (commonly 'base_link') -->
+  <xacro:arg name="arm_base_link" default="base_link"/>
+
+  <!-- Includes -->
+  <xacro:include filename="$(find amr_description)/xacro/ld250.urdf.xacro"/>
+
+  <!-- TM12x macro set -->
+  <xacro:include filename="$(find tm_description)/xacro/macro.gazebo.xacro" />
+  <xacro:include filename="$(find tm_description)/xacro/macro.transmission.xacro" />
+  <xacro:include filename="$(find tm_description)/xacro/macro.materials.xacro" />
+  <xacro:include filename="$(find tm_description)/xacro/macro.tm12x-nominal.urdf.xacro" />
+
+
+  <!-- LD250 mobile base -->
+  <xacro:ld250 prefix="$(arg base_prefix)" mesh_pkg="amr_description"/>
+
+  <!-- TM12x arm (gazebo/transmission/material macros) -->
+  <xacro:tmr_gazebo ns="$(arg ns)" prefix="$(arg arm_prefix)" />
+  <xacro:tmr_transmission prefix="$(arg arm_prefix)" hw_iface="$(arg trans_hw_iface)" />
+  <xacro:tmr_materials/>
+
+  <!-- TM12x geometry -->
+  <xacro:property name="arm_color_val" value="$(arg arm_color)"/>
+  <xacro:if value="${arm_color_val == 'none'}">
+    <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)"/>
+  </xacro:if>
+  <xacro:unless value="${arm_color_val == 'none'}">
+    <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)" color="$(arg arm_color)" format="stl"/>
+  </xacro:unless>
+
+  <!-- Mount the TM12x base to the LD250 base_link -->
+  <joint name="ld250_to_tm12x_mount" type="fixed">
+    <parent link="$(arg base_prefix)base_link"/>
+    <child link="$(arg arm_prefix)$(arg arm_base_link)"/>
+    <origin xyz="$(arg arm_mount_xyz)" rpy="$(arg arm_mount_rpy)"/>
+  </joint>
+
+</robot>
