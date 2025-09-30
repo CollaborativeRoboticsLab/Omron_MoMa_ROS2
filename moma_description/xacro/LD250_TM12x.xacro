@@ -36,6 +36,8 @@
   <xacro:if value="${arm_color_val == 'none'}">
     <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)"/>
   </xacro:if>
+
+  <!-- If the arm color is not 'none', include the colored version -->
   <xacro:unless value="${arm_color_val == 'none'}">
     <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)" color="$(arg arm_color)" format="stl"/>
   </xacro:unless>
