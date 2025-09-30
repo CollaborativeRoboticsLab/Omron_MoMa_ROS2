@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     qtdeclarative5-dev \
     python3-pip \
     python3-dev \
+    ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-nav2-bringup \
     ros-${ROS_DISTRO}-slam-toolbox \
@@ -52,3 +53,5 @@ RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 
 # Install python packages
 RUN pip3 install --no-cache-dir pymodbus selectors2
+
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
