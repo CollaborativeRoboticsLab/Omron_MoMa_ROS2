@@ -65,3 +65,8 @@ To clean the system,
 docker compose down
 ```
 
+## To Do List
+
+- [ ] Update launch files to use standard parameters and remove non-launch related python code
+- [ ] Create cascadeing launch files for TMDriver, Moveit and RVIZ, AMR base and RVIZ
+
