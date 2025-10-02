@@ -1,12 +1,12 @@
-# Omron_MoMa_ROS2
+# Omron Mobile Manipulator
 
 Original packages are from [OmronAPAC](https://github.com/OmronAPAC) 
 
-This repository allows controlling the Base and Arm of the Omron Mobile Manipulator using packages,
+This repository allows controlling the Base, Arm and Gripper of the Omron Mobile Manipulator using packages,
 
 - [omron_arm](https://github.com/CollaborativeRoboticsLab/omron_arm) package 
 - [omron_base](https://github.com/CollaborativeRoboticsLab/omron_base) package
-- [omron_gripper](https://github.com/CollaborativeRoboticsLab/omron_gripper.git)
+- [omron_gripper](https://github.com/CollaborativeRoboticsLab/omron_gripper.git) package
 
 For supported features and limitations, see the individual repositories on the features supported by the MoMa.
 

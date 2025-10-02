@@ -31,6 +31,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-vision-opencv \
     && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    ros-${ROS_DISTRO}-rqt-tf-tree
     
 RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
@@ -47,9 +50,9 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 # make sure folders exist
 WORKDIR /home/$USERNAME/colcon_ws/src 
 
-RUN git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
-RUN git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git
-RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
+RUN git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git -b develop
+RUN git clone https://github.com/CollaborativeRoboticsLab/omron_base.git -b develop
+RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git -b develop
 
 # Install python packages
 RUN pip3 install --no-cache-dir pymodbus selectors2
