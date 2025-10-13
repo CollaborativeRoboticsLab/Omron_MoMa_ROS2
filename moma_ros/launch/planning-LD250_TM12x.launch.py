@@ -123,49 +123,6 @@ def generate_launch_description():
         parameters=[robot_description]
     )
 
-    # Joints Publisher
-    joints_publisher_node = Node(
-        package='amr_description',
-        executable='joints_publisher',
-        output='screen',
-    )
-
-    # Data Points Marker
-    data_points_node = Node(
-        package='amr_description',
-        executable='data_points_marker',
-        output='screen',
-        parameters=[vis_config],
-    )
-        
-    # Goals Marker
-    goals_node = Node(
-        package='amr_description',
-        executable='goals_marker',
-        output='screen',
-    )
-
-    # Laser Scans Marker
-    laser_scans_node = Node(
-        package='amr_description',
-        executable='laser_scans',
-        output='screen',
-    )
-    
-    # RViz goto point node
-    goto_point_node = Node(
-        package='amr_core',
-        executable='goto_point',
-        output='screen',
-    )
-    
-    # RViz goto point node
-    localize_at_point_node = Node(
-        package='amr_core',
-        executable='localize_at_point',
-        output='screen',
-    )
-
     # Virtual Hand Solo to Base Link  Static TF
     static_tf_node_1 = Node(
         package='tf2_ros',
@@ -175,14 +132,6 @@ def generate_launch_description():
         arguments=['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', 'virtual_hand_solo/base_link', 'base']
     )
 
-    # Map to Pose Static TF  
-    static_tf_node_2 = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='world_publisher',
-        output='log',
-        arguments=['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', 'map', 'pose']
-    )
 
     return LaunchDescription([
         run_move_group_node,

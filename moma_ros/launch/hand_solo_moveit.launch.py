@@ -41,13 +41,6 @@ def load_yaml(package_name, file_path):
 
 
 def generate_launch_description():
-    args = []
-    length = len(sys.argv)
-    if (len(sys.argv) >= 5):
-        i = 4
-        while i < len(sys.argv):
-            args.append(sys.argv[i])
-            i = i + 1
 
     # Configure robot_description
     description_path = 'tm_description'
@@ -171,14 +164,25 @@ def generate_launch_description():
         parameters=[robot_description]
     )
 
-    # joint driver
+    # Arm hardware interface
+    tm_parameters = os.path.join(get_package_share_directory(tm12x_moveit_config), 'config', 'interface.yaml')
     tm_driver_node = Node(
         package='tm_driver',
         executable='tm_driver',
         # name='tm_driver',
         output='screen',
         emulate_tty=True,
-        arguments=args
+        parameters=[tm_parameters],
+    )
+
+    # Base hardware node
+    core_parms = os.path.join(get_package_share_directory('amr_ros'), 'config', 'parameters.yaml')
+    core = Node(
+        package='amr_core',
+        executable='amr_core',
+        name='amr_core',
+        output='screen',
+        parameters=[core_parms],
     )
 
     # Launching all the nodes

@@ -4,69 +4,28 @@ from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    args = []
-    length = len(sys.argv)
-    if (len(sys.argv) >= 5):
-        i = 4
-        while i < len(sys.argv):
-            args.append(sys.argv[i])
-            i = i + 1
 
-    # TM Driver
+    tm_parameters = os.path.join(get_package_share_directory(tm12x_moveit_config), 'config', 'interface.yaml')
     tm_driver_node = Node(
         package='tm_driver',
         executable='tm_driver',
-        #name='tm_driver',
+        # name='tm_driver',
         output='screen',
-        arguments=[str(args)[12:-2]],
+        emulate_tty=True,
+        parameters=[tm_parameters],
     )
 
-    modbus_server_node = Node(
-        package='gripper_core',
-        executable='modbus_server',
-        output='screen',
-    )
-
-    arcl_api = Node(
+    core_parms = os.path.join(get_package_share_directory('amr_ros'), 'config', 'parameters.yaml')
+    core = Node(
         package='amr_core',
-        executable='arcl_api_server',
-        #name='arcl_api_server',
-        output='log',
-        parameters=[{
-            'ip_address': "192.168.1.1",
-            'port': 7171,
-            'def_arcl_passwd': "omron"
-        }]
-    )
-
-    ld_states = Node(
-        package='amr_core',
-        executable='ld_states_publisher',
-        #name='ld_states_publisher',
+        executable='amr_core',
+        name='amr_core',
         output='screen',
-        parameters=[{
-            'local_ip': "192.168.1.50",
-            'local_port': 7179
-        }]
-    )
-
-    action_serve = Node(
-        package='amr_core',
-        executable='action_server',
-        #name = 'action_server',
-        output='screen',
-        parameters=[{
-            'ip_address': "192.168.1.1",
-            'port': 7171,
-            'def_arcl_passwd': "omron"
-        }]
+        parameters=[core_parms],
     )
 
     return LaunchDescription([
         tm_driver_node,
-        modbus_server_node,
-        arcl_api,
-        ld_states,
-        action_serve
+        core,
         ])
 
