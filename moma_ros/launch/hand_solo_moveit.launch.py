@@ -164,8 +164,8 @@ def generate_launch_description():
         parameters=[robot_description]
     )
 
-    # Arm hardware interface
-    tm_parameters = os.path.join(get_package_share_directory(tm12x_moveit_config), 'config', 'interface.yaml')
+    # # Arm hardware interface
+    tm_parameters = os.path.join(get_package_share_directory('tm12x_moveit_config'), 'config', 'interface.yaml')
     tm_driver_node = Node(
         package='tm_driver',
         executable='tm_driver',
@@ -173,16 +173,6 @@ def generate_launch_description():
         output='screen',
         emulate_tty=True,
         parameters=[tm_parameters],
-    )
-
-    # Base hardware node
-    core_parms = os.path.join(get_package_share_directory('amr_ros'), 'config', 'parameters.yaml')
-    core = Node(
-        package='amr_core',
-        executable='amr_core',
-        name='amr_core',
-        output='screen',
-        parameters=[core_parms],
     )
 
     # Launching all the nodes
