@@ -25,8 +25,15 @@ def generate_launch_description():
         parameters=[core_parms],
     )
 
+    filter = Node(
+        package='moma_filter',
+        executable='velocity_filter',
+        name='velocity_filter',
+        output='screen'
+    )
+
     return LaunchDescription([
         tm_driver_node,
         core,
-        ])
-
+        filter
+    ])
