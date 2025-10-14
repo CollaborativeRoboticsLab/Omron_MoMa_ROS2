@@ -21,7 +21,6 @@ def load_file(package_name, file_path):
 def generate_launch_description():
     # Configure robot_description
 
-    # robot_description_config = load_file('amr_description', 'urdf/LD250.urdf')
     robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
     robot_description = {'robot_description' : robot_description_config}
 
@@ -43,6 +42,7 @@ def generate_launch_description():
             'start_state_max_bounds_error': 0.1,
         },
     }
+
     ompl_planning_yaml = load_yaml('tm12x_moveit_config'  , 'config/ompl_planning.yaml')
     ompl_planning_pipeline_config['ompl'].update(ompl_planning_yaml)
 
@@ -92,28 +92,6 @@ def generate_launch_description():
         ],
     )
 
-    # RViz configuration
-    rviz_config_file = (
-        get_package_share_directory("moma_ros") + "/rviz/run_move_group.rviz"
-    )
-
-    # RViz
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='log',
-        emulate_tty=True,
-        arguments=['-d', rviz_config_file],
-        parameters=[
-            robot_description,
-            robot_description_semantic,
-            ompl_planning_pipeline_config,
-            robot_description_kinematics,
-            joint_limits_yaml,
-        ],
-    )
-
     # Publish TF
     robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -135,15 +113,8 @@ def generate_launch_description():
 
     return LaunchDescription([
         run_move_group_node,
-        rviz_node, 
-        robot_state_publisher, 
-        joints_publisher_node,
-        data_points_node,
-        goals_node,
-        laser_scans_node,
-        goto_point_node,
-        localize_at_point_node,
-        static_tf_node_1,
-        static_tf_node_2
+        robot_state_publisher,
+        static_tf_node_1
         ])
 
+    
