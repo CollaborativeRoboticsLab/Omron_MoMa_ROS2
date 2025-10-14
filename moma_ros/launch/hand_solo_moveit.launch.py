@@ -47,7 +47,7 @@ def generate_launch_description():
     xacro_path = 'handsolo.urdf.xacro'
     moveit_config_path = 'tm12x_moveit_config'    
     srdf_path = 'config/tm12x.srdf'
-    rviz_path = '/rviz/run_move_group.rviz'     
+    rviz_path = '/rviz/ld250_tm12x-moveit.rviz'     
     
     robot_description_config = xacro.process_file(
         os.path.join(
