@@ -26,11 +26,11 @@ def generate_launch_description():
 
     # Paths to included launch files (within moma_ros)
     moma_ros_share = get_package_share_directory('moma_ros')
+    
     include_hardware = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x-hardware.launch.py')
+            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.hardware.launch.py')
         ),
-        # Only bring forward arm_use_simulation as requested
         launch_arguments={
             'arm_use_simulation': arm_use_simulation,
         }.items(),
@@ -38,19 +38,19 @@ def generate_launch_description():
 
     include_moveit = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x-moveit.launch.py')
+            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.moveit.launch.py')
         )
     )
 
     include_nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x-nav2.launch.py')
+            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.nav2.launch.py')
         )
     )
 
     include_rviz = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x-rviz.launch.py')
+            os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.rviz.launch.py')
         ),
         condition=IfCondition(use_rviz)
     )
@@ -61,5 +61,5 @@ def generate_launch_description():
         include_hardware,
         include_moveit,
         include_nav2,
-        include_rviz,
+        include_rviz
     ])

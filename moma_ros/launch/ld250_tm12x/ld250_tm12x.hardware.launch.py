@@ -14,8 +14,8 @@ def load_file(package_name, file_path):
     try:
         with open(absolute_file_path, 'r') as file:
             return file.read()
-    except EnvironmentError: # parent of IOError, OSError *and* WindowsError where available
-        return None
+    except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
+        return ''
 
 def generate_launch_description():
 
@@ -35,10 +35,11 @@ def generate_launch_description():
         description='Use simulation mode (true/false)'
     )
 
+    # Note: default_value must be a string or Substitution, not a dict
     declare_robot_description = DeclareLaunchArgument(
-        'robot_description', 
-        default={'robot_description' : load_file('moma_description', 'urdf/ld250_tm12x.urdf')},
-        description='Target robot description file'
+        'robot_description',
+        default_value=load_file('moma_description', 'urdf/ld250_tm12x.urdf'),
+        description='Robot description XML (URDF) for robot_state_publisher'
     )
 
     # Include tm_bringup.launch.py (arm driver bringup)
@@ -63,7 +64,7 @@ def generate_launch_description():
     )
 
     # Velocity filter node
-    filter = Node(
+    filter_node = Node(
         package='moma_filter',
         executable='velocity_filter',
         name='velocity_filter',
@@ -76,5 +77,5 @@ def generate_launch_description():
         declare_robot_description,
         tm_driver_launch,
         amr_core_launch,
-        filter,
+        filter_node
     ])
