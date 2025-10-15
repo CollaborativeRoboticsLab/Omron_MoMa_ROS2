@@ -92,15 +92,6 @@ def generate_launch_description():
         ],
     )
 
-    # Publish TF
-    robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        output='both',
-        parameters=[robot_description]
-    )
-
     # Virtual Hand Solo to Base Link  Static TF
     static_tf_node_1 = Node(
         package='tf2_ros',
@@ -113,7 +104,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         run_move_group_node,
-        robot_state_publisher,
         static_tf_node_1
         ])
 
