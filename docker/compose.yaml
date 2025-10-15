@@ -3,10 +3,17 @@ services:
     container_name: omron_moma
     image: ghcr.io/collaborativeroboticslab/omron_moma:humble
     command:
-      # - ros2 run tm_driver tm_driver robot_ip:=<robot_ip_address>
-      - ros2 launch tm12x_moveit_config tm12x_run_move_group_headless.launch.py robot_ip:=<robot_ip_address>
+      - ros2 launch moma_ros ld250_tm12x.launch.py arm_use_simulation:=true use_rviz:=true
+    environment:
+      - PYTHONUNBUFFERED=1                # GUI related
+      - DISPLAY                           # GUI related
+      - QT_X11_NO_MITSHM=1                # GUI related
+      - NVIDIA_VISIBLE_DEVICES=all        # GUI related
+      - NVIDIA_DRIVER_CAPABILITIES=all    # GUI related
+      - ROS_DOMAIN_ID=0
     restart: unless-stopped
     privileged: true
     network_mode: host
     volumes:
       - /dev:/dev
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw    # GUI related
