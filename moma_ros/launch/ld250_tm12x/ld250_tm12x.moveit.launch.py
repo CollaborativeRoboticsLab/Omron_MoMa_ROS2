@@ -2,6 +2,7 @@ import os
 import sys
 import yaml
 import json
+import xacro
 from launch import LaunchDescription
 from launch.substitutions import Command
 from launch_ros.actions import Node
@@ -17,12 +18,30 @@ def load_file(package_name, file_path):
     except EnvironmentError: # parent of IOError, OSError *and* WindowsError where available
         return None
 
+def load_yaml(package_name, file_path):
+    package_path = get_package_share_directory(package_name)
+    absolute_file_path = os.path.join(package_path, file_path)
 
+    try:
+        with open(absolute_file_path, 'r') as file:
+            return yaml.safe_load(file)
+    except OSError:  # parent of IOError, OSError *and* WindowsError where available
+        return None
+        
 def generate_launch_description():
     # Configure robot_description
 
-    robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
-    robot_description = {'robot_description' : robot_description_config}
+    # robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
+    # robot_description = {'robot_description' : robot_description_config}
+
+    robot_description_config = xacro.process_file(
+        os.path.join(
+            get_package_share_directory('tm_description'),
+            'xacro',
+            'handsolo.urdf.xacro',
+        )
+    )
+    robot_description = {'robot_description': robot_description_config.toxml()}
 
     # SRDF Configuration
     robot_description_semantic_config = load_file('tm12x_moveit_config'  , 'config/tm12x.srdf')
@@ -38,7 +57,11 @@ def generate_launch_description():
         'planning_pipelines': ['ompl'],
         'ompl': {
             'planning_plugin': 'ompl_interface/OMPLPlanner',
-            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
+            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization 
+                                   default_planner_request_adapters/FixWorkspaceBounds 
+                                   default_planner_request_adapters/FixStartStateBounds 
+                                   default_planner_request_adapters/FixStartStateCollision 
+                                   default_planner_request_adapters/FixStartStatePathConstraints""",
             'start_state_max_bounds_error': 0.1,
         },
     }
@@ -48,7 +71,10 @@ def generate_launch_description():
 
     # Trajectory Execution Configuration -> Controllers
     controllers_yaml = load_yaml('tm12x_moveit_config', 'config/controllers.yaml')
-    moveit_controllers = {'moveit_simple_controller_manager': controllers_yaml, 'moveit_controller_manager': 'moveit_simple_controller_manager/MoveItSimpleControllerManager'}
+    moveit_controllers = {
+        'moveit_simple_controller_manager': controllers_yaml, 
+        'moveit_controller_manager': 'moveit_simple_controller_manager/MoveItSimpleControllerManager'
+    }
 
     # Trajectory Execution Functionality
     trajectory_execution = {
@@ -92,15 +118,6 @@ def generate_launch_description():
         ],
     )
 
-    # Publish TF
-    robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        output='both',
-        parameters=[robot_description]
-    )
-
     # Virtual Hand Solo to Base Link  Static TF
     static_tf_node_1 = Node(
         package='tf2_ros',
@@ -113,7 +130,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         run_move_group_node,
-        robot_state_publisher,
         static_tf_node_1
         ])
 

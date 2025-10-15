@@ -1,12 +1,3 @@
-############################################################################################### 
-#  tm12x_run_move_group.launch.py
-#   
-#  Various portions of the code are based on original source from 
-#  The reference: "https://github.com/moveit/moveit2/tree/main/moveit_ros/moveit_servo/launch"
-#  and are used in accordance with the following license.
-#  "https://github.com/moveit/moveit2/blob/main/LICENSE.txt"
-############################################################################################### 
-
 import os
 import sys
 
@@ -71,7 +62,11 @@ def generate_launch_description():
         'planning_pipelines': ['ompl'],
         'ompl': {
             'planning_plugin': 'ompl_interface/OMPLPlanner',
-            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
+            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization 
+                                   default_planner_request_adapters/FixWorkspaceBounds 
+                                   default_planner_request_adapters/FixStartStateBounds 
+                                   default_planner_request_adapters/FixStartStateCollision 
+                                   default_planner_request_adapters/FixStartStatePathConstraints""",
             'start_state_max_bounds_error': 0.1,
         },
     }
@@ -81,7 +76,10 @@ def generate_launch_description():
     # Trajectory Execution Configuration
     # Controllers
     controllers_yaml = load_yaml(moveit_config_path, 'config/controllers.yaml')
-    moveit_controllers = {'moveit_simple_controller_manager': controllers_yaml, 'moveit_controller_manager': 'moveit_simple_controller_manager/MoveItSimpleControllerManager'}
+    moveit_controllers = {
+        'moveit_simple_controller_manager': controllers_yaml, 
+        'moveit_controller_manager': 'moveit_simple_controller_manager/MoveItSimpleControllerManager'
+    }
 
     # Trajectory Execution Functionality
     trajectory_execution = {
@@ -155,33 +153,11 @@ def generate_launch_description():
         arguments=['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', 'virtual_hand_solo/base_link', 'base']
     )
 
-    # Publish TF
-    robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        output='both',
-        parameters=[robot_description]
-    )
-
-     # Arm hardware interface
-    tm_parameters = os.path.join(get_package_share_directory('tm12x_moveit_config'), 'config', 'interface.yaml')
-    tm_driver_node = Node(
-        package='tm_driver',
-        executable='tm_driver',
-        # name='tm_driver',
-        output='screen',
-        emulate_tty=True,
-        parameters=[tm_parameters],
-    )
-
     # Launching all the nodes
     return LaunchDescription(
         [
-            tm_driver_node,
             rviz_node,
             static_tf,
-            robot_state_publisher,
-            run_move_group_node,
+            run_move_group_node
         ]
     )

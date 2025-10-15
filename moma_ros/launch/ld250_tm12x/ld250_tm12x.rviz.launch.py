@@ -2,9 +2,11 @@ import os
 import sys
 import yaml
 import json
+import xacro
 from launch import LaunchDescription
 from launch.substitutions import Command
 from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution
 from ament_index_python.packages import get_package_share_directory
 
@@ -18,10 +20,30 @@ def load_file(package_name, file_path):
     except EnvironmentError: # parent of IOError, OSError *and* WindowsError where available
         return None
 
+
+def load_yaml(package_name, file_path):
+    package_path = get_package_share_directory(package_name)
+    absolute_file_path = os.path.join(package_path, file_path)
+
+    try:
+        with open(absolute_file_path, 'r') as file:
+            return yaml.safe_load(file)
+    except OSError:  # parent of IOError, OSError *and* WindowsError where available
+        return None
+
 def generate_launch_description():
     # Configure robot_description
-    robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
-    robot_description = {'robot_description' : robot_description_config}
+    # robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
+    # robot_description = {'robot_description' : robot_description_config}
+
+    robot_description_config = xacro.process_file(
+        os.path.join(
+            get_package_share_directory('tm_description'),
+            'xacro',
+            'handsolo.urdf.xacro',
+        )
+    )
+    robot_description = {'robot_description': robot_description_config.toxml()}
 
     # SRDF Configuration
     robot_description_semantic_config = load_file('tm12x_moveit_config'  , 'config/tm12x.srdf')
@@ -80,8 +102,11 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         arguments=['-d', nav2_rviz_cfg],
-        parameters=[{'use_sim_time': use_sim_time}],
+        # parameters=[{'use_sim_time': use_sim_time}],
         output='screen'
     )
 
-    return LaunchDescription([moveit_rviz_node, nav2_rviz_node])
+    return LaunchDescription([
+        moveit_rviz_node, 
+        nav2_rviz_node
+    ])

@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     qtdeclarative5-dev \
     python3-pip \
     python3-dev \
+    net-tools \
+    iputils-ping \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
     ros-${ROS_DISTRO}-navigation2 \
     ros-${ROS_DISTRO}-nav2-bringup \

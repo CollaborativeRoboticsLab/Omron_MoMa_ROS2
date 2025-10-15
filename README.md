@@ -42,8 +42,30 @@ finally build by
 cd ..
 colcon build
 ```
+**or save time and use devcontainer** 
 
-**or save time and use devcontainer or docker image** 
+## Usage
+
+### Start the system headless
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py
+```
+
+### Start the system with RVIZ
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py use_rviz:=true
+```
+
+### Start the system with arm in simulation mode
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py arm_use_simulation:=true
+```
 
 ## Docker
 
@@ -81,6 +103,6 @@ ros2 run xacro xacro src/omron_moma/moma_description/xacro/ld250_tm12x.urdf.xacr
 
 ## To Do List
 
-- [ ] Update launch files to use standard parameters and remove non-launch related python code
-- [ ] Create cascadeing launch files for TMDriver, Moveit and RVIZ, AMR base and RVIZ
+- [x] Update launch files to use standard parameters and remove non-launch related python code
+- [x] Create cascadeing launch files for TMDriver, Moveit and RVIZ, AMR base and RVIZ
 

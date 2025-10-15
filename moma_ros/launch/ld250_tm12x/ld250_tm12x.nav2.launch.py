@@ -175,8 +175,6 @@ def generate_launch_description():
         ]
     )
 
-
-
     return LaunchDescription([
         declare_use_sim_time,
         static_tf,
@@ -189,5 +187,5 @@ def generate_launch_description():
         bt_navigator,
         waypoint_follower,
         velocity_smoother,
-        lifecycle_manager_navigation,
+        lifecycle_manager_navigation
     ])
