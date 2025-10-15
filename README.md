@@ -42,8 +42,30 @@ finally build by
 cd ..
 colcon build
 ```
+**or save time and use devcontainer** 
 
-**or save time and use devcontainer or docker image** 
+## Usage
+
+### Start the system headless
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py
+```
+
+### Start the system with RVIZ
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py use_rviz:=true
+```
+
+### Start the system with arm in simulation mode
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py arm_use_simulation:=true
+```
 
 ## Docker
 
@@ -65,8 +87,22 @@ To clean the system,
 docker compose down
 ```
 
+## To generate a new urdf file,
+
+1. Define a xacro file within `moma_description/xacro` that imports and customises parts and joints as reqired.
+2. Run the following command to generate the urdf file. replace the `<filename>` with required name.
+```bash
+ros2 run xacro xacro src/omron_moma/moma_description/xacro/<filename>.urdf.xacro -o <filename>.urdf
+```
+eg
+```bash
+ros2 run xacro xacro src/omron_moma/moma_description/xacro/ld250_tm12x.urdf.xacro -o ld250_tm12x.urdf
+```
+3. This would generate the file in the root of the workspace. Move the file into `moma_description/urdf` folder
+
+
 ## To Do List
 
-- [ ] Update launch files to use standard parameters and remove non-launch related python code
-- [ ] Create cascadeing launch files for TMDriver, Moveit and RVIZ, AMR base and RVIZ
+- [x] Update launch files to use standard parameters and remove non-launch related python code
+- [x] Create cascadeing launch files for TMDriver, Moveit and RVIZ, AMR base and RVIZ
 

@@ -19,6 +19,17 @@ ENV WORKSPACE_ROOT=/omron_ws
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    libx11-dev \
+    libxext-dev \
+    libxtst-dev \
+    libxrender-dev \
+    libxrandr-dev \
+    libgl1-mesa-glx \
+    libglu1-mesa \
+    libxi-dev \
+    libsm6 \
+    libxkbcommon-x11-0 \
+    x11-xserver-utils \
     git \
     python3-pip \
     python3-colcon-common-extensions \
@@ -27,16 +38,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     qtdeclarative5-dev \
-    ros-humble-moveit \
-    ros-humble-controller-manager \
-    ros-humble-joint-trajectory-controller \
-    ros-humble-joint-state-broadcaster \
-    ros-humble-rmw-cyclonedds-cpp \
-    ros-humble-joint-state-publisher \
-    ros-humble-joint-state-publisher-gui \
-    ros-humble-vision-opencv
-
-RUN apt-get clean
+    ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
+    ros-${ROS_DISTRO}-navigation2 \
+    ros-${ROS_DISTRO}-nav2-bringup \
+    ros-${ROS_DISTRO}-slam-toolbox \
+    ros-${ROS_DISTRO}-moveit \
+    ros-${ROS_DISTRO}-controller-manager \
+    ros-${ROS_DISTRO}-joint-trajectory-controller \
+    ros-${ROS_DISTRO}-joint-state-broadcaster \
+    ros-${ROS_DISTRO}-joint-state-publisher \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-vision-opencv \
+    ros-${ROS_DISTRO}-teleop-twist-joy \
+    ros-${ROS_DISTRO}-joy 
 
 # Install python packages
 RUN pip3 install --no-cache-dir pymodbus
@@ -56,6 +70,10 @@ RUN git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 
 WORKDIR ${WORKSPACE_ROOT}
+
+# Initialize rosdep
+RUN rm /etc/ros/rosdep/sources.list.d/20-default.list
+RUN rosdep init && rosdep update &&rosdep install --from-paths ${WORKSPACE_ROOT}/src -y --ignore-src
 
 # Build the workspace
 RUN . /opt/ros/humble/setup.sh && colcon build
@@ -88,6 +106,7 @@ FROM ros:humble-ros-base-jammy AS final
 ## Parameters
 ENV WORKSPACE_ROOT=/omron_ws
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ENV ROS_DOMAIN_ID=0
 
 WORKDIR /
 
@@ -95,9 +114,6 @@ COPY --from=base / /
 
 # uncomment if buiding through git workflow
 COPY docker/ros_entrypoint.sh ros_entrypoint.sh
-
-# uncomment if buiding locally
-# COPY ros_entrypoint.sh ros_entrypoint.sh  
 
 RUN chmod +x /ros_entrypoint.sh
 
