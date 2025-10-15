@@ -165,20 +165,20 @@ def generate_launch_description():
     )
 
     # # Arm hardware interface
-    tm_parameters = os.path.join(get_package_share_directory('tm12x_moveit_config'), 'config', 'interface.yaml')
-    tm_driver_node = Node(
-        package='tm_driver',
-        executable='tm_driver',
-        # name='tm_driver',
-        output='screen',
-        emulate_tty=True,
-        parameters=[tm_parameters],
-    )
+    # tm_parameters = os.path.join(get_package_share_directory('tm12x_moveit_config'), 'config', 'interface.yaml')
+    # tm_driver_node = Node(
+    #     package='tm_driver',
+    #     executable='tm_driver',
+    #     # name='tm_driver',
+    #     output='screen',
+    #     emulate_tty=True,
+    #     parameters=[tm_parameters],
+    # )
 
     # Launching all the nodes
     return LaunchDescription(
         [
-            tm_driver_node,
+            # tm_driver_node,
             rviz_node,
             static_tf,
             robot_state_publisher,
