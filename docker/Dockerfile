@@ -71,10 +71,6 @@ RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 
 WORKDIR ${WORKSPACE_ROOT}
 
-# Initialize rosdep
-RUN rm /etc/ros/rosdep/sources.list.d/20-default.list
-RUN rosdep init && rosdep update &&rosdep install --from-paths ${WORKSPACE_ROOT}/src -y --ignore-src
-
 # Build the workspace
 RUN . /opt/ros/humble/setup.sh && colcon build
 
