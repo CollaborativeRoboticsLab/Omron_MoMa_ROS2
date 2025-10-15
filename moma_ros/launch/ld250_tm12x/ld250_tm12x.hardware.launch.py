@@ -5,6 +5,7 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
+from launch.conditions import IfCondition
 from ament_index_python.packages import get_package_share_directory
 
 def load_file(package_name, file_path):
@@ -21,7 +22,7 @@ def generate_launch_description():
 
     arm_robot_ip = LaunchConfiguration('arm_robot_ip')
     arm_use_simulation = LaunchConfiguration('arm_use_simulation')
-    robot_description = LaunchConfiguration('robot_description')
+    robot_description_override = LaunchConfiguration('robot_description_override')
 
     declare_robot_ip = DeclareLaunchArgument(
         'arm_robot_ip',
@@ -35,11 +36,10 @@ def generate_launch_description():
         description='Use simulation mode (true/false)'
     )
 
-    # Note: default_value must be a string or Substitution, not a dict
-    declare_robot_description = DeclareLaunchArgument(
-        'robot_description',
-        default_value=load_file('moma_description', 'urdf/ld250_tm12x.urdf'),
-        description='Robot description XML (URDF) for robot_state_publisher'
+    declare_robot_description_override = DeclareLaunchArgument(
+        'robot_description_override',
+        default_value='true',
+        description='Whether to override robot_description defined in amr_core.launch.py (true/false)'
     )
 
     # Include tm_bringup.launch.py (arm driver bringup)
@@ -59,8 +59,19 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('amr_ros'), 'launch', 'amr_core.launch.py')
         ),
         launch_arguments={
-            'robot_description': robot_description,
+            'robot_description_override': robot_description_override,
         }.items(),
+    )
+
+    robot_description = {'robot_description': load_file('moma_description', 'urdf/ld250_tm12x.urdf')}
+
+    robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher',
+        output='log',
+        parameters=[robot_description],
+        condition=IfCondition(robot_description_override)
     )
 
     # Velocity filter node
@@ -74,7 +85,7 @@ def generate_launch_description():
     return LaunchDescription([
         declare_robot_ip,
         declare_use_simulation,
-        declare_robot_description,
+        declare_robot_description_override,
         tm_driver_launch,
         amr_core_launch,
         filter_node
