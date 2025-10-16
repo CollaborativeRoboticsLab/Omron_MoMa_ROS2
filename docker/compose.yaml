@@ -2,8 +2,6 @@ services:
   omron_moma:
     container_name: omron_moma
     image: ghcr.io/collaborativeroboticslab/omron_moma:humble
-    command:
-      - ros2 launch moma_ros ld250_tm12x.launch.py arm_use_simulation:=true use_rviz:=true
     environment:
       - PYTHONUNBUFFERED=1                # GUI related
       - DISPLAY                           # GUI related
