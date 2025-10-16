@@ -103,7 +103,7 @@ def generate_launch_description():
         name='rviz2',
         arguments=['-d', nav2_rviz_cfg],
         # parameters=[{'use_sim_time': use_sim_time}],
-        output='screen'
+        output='log'
     )
 
     return LaunchDescription([

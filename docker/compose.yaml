@@ -12,7 +12,7 @@ services:
       - USE_RVIZ=true
       - USE_MOVEIT=true
       - USE_NAV2=true
-      - ARM_USE_SIMULATION=false
+      - ARM_USE_SIMULATION=true
     restart: unless-stopped
     privileged: true
     network_mode: host
