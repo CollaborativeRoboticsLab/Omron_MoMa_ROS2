@@ -104,6 +104,11 @@ ENV WORKSPACE_ROOT=/omron_ws
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 ENV ROS_DOMAIN_ID=0
 
+ENV USE_RVIZ=true
+ENV USE_MOVEIT=true
+ENV USE_NAV2=true
+ENV ARM_USE_SIMULATION=false
+
 WORKDIR /
 
 COPY --from=base / /
@@ -114,3 +119,8 @@ COPY docker/ros_entrypoint.sh ros_entrypoint.sh
 RUN chmod +x /ros_entrypoint.sh
 
 ENTRYPOINT [ "/ros_entrypoint.sh" ]
+
+CMD ros2 launch moma_ros ld250_tm12x.launch.py arm_use_simulation:=$ARM_USE_SIMULATION \
+                                               use_rviz:=$USE_RVIZ \
+                                               use_moveit:=$USE_MOVEIT \
+                                               use_nav2:=$USE_NAV2

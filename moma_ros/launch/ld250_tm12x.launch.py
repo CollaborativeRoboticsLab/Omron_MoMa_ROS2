@@ -11,6 +11,8 @@ def generate_launch_description():
     # Top-level launch args
     arm_use_simulation = LaunchConfiguration('arm_use_simulation')
     use_rviz = LaunchConfiguration('use_rviz')
+    use_moveit = LaunchConfiguration('use_moveit')
+    use_nav2 = LaunchConfiguration('use_nav2')
 
     declare_arm_use_simulation = DeclareLaunchArgument(
         'arm_use_simulation',
@@ -22,6 +24,18 @@ def generate_launch_description():
         'use_rviz',
         default_value='false',
         description='Whether to start RViz (true/false)'
+    )
+
+    declare_use_moveit = DeclareLaunchArgument(
+        'use_moveit',
+        default_value='true',
+        description='Whether to start MoveIt (true/false)'
+    )
+
+    declare_use_nav2 = DeclareLaunchArgument(
+        'use_nav2',
+        default_value='true',
+        description='Whether to start Nav2 (true/false)'
     )
 
     # Paths to included launch files (within moma_ros)
@@ -39,13 +53,15 @@ def generate_launch_description():
     include_moveit = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.moveit.launch.py')
-        )
+        ),
+        condition=IfCondition(use_moveit)
     )
 
     include_nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.nav2.launch.py')
-        )
+        ),
+        condition=IfCondition(use_nav2)
     )
 
     include_rviz = IncludeLaunchDescription(
@@ -58,6 +74,8 @@ def generate_launch_description():
     return LaunchDescription([
         declare_arm_use_simulation,
         declare_use_rviz,
+        declare_use_moveit,
+        declare_use_nav2,
         include_hardware,
         include_moveit,
         include_nav2,

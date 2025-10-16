@@ -11,6 +11,10 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all        # GUI related
       - NVIDIA_DRIVER_CAPABILITIES=all    # GUI related
       - ROS_DOMAIN_ID=0
+      - USE_RVIZ=true
+      - USE_MOVEIT=true
+      - USE_NAV2=true
+      - ARM_USE_SIMULATION=false
     restart: unless-stopped
     privileged: true
     network_mode: host
