@@ -9,16 +9,24 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     # Top-level launch args
-    arm_use_simulation = LaunchConfiguration('arm_use_simulation')
+    tm_use_simulation = LaunchConfiguration('tm_use_simulation')
+    tm_robot_ip = LaunchConfiguration('tm_robot_ip')
     use_rviz = LaunchConfiguration('use_rviz')
     use_moveit = LaunchConfiguration('use_moveit')
     use_nav2 = LaunchConfiguration('use_nav2')
 
-    declare_arm_use_simulation = DeclareLaunchArgument(
-        'arm_use_simulation',
+    declare_tm_use_simulation = DeclareLaunchArgument(
+        'tm_use_simulation',
         default_value='false',
-        description='Forwarded to hardware bringup to run arm in simulation (true/false)'
+        description='Forwarded to hardware bringup to run TM robot in simulation (true/false)'
     )
+
+    declare_tm_robot_ip = DeclareLaunchArgument(
+        'tm_robot_ip',
+        default_value='192.168.1.2',
+        description='Target robot IP address'
+    )
+
 
     declare_use_rviz = DeclareLaunchArgument(
         'use_rviz',
@@ -46,7 +54,8 @@ def generate_launch_description():
             os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.hardware.launch.py')
         ),
         launch_arguments={
-            'arm_use_simulation': arm_use_simulation,
+            'tm_use_simulation': tm_use_simulation,
+            'tm_robot_ip': tm_robot_ip,
         }.items(),
     )
 
@@ -72,7 +81,8 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        declare_arm_use_simulation,
+        declare_tm_use_simulation,
+        declare_tm_robot_ip,
         declare_use_rviz,
         declare_use_moveit,
         declare_use_nav2,

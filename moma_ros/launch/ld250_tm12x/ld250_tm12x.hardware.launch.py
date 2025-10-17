@@ -20,18 +20,18 @@ def load_file(package_name, file_path):
 
 def generate_launch_description():
 
-    arm_robot_ip = LaunchConfiguration('arm_robot_ip')
-    arm_use_simulation = LaunchConfiguration('arm_use_simulation')
+    tm_robot_ip = LaunchConfiguration('tm_robot_ip')
+    tm_use_simulation = LaunchConfiguration('tm_use_simulation')
     robot_description_override = LaunchConfiguration('robot_description_override')
 
     declare_robot_ip = DeclareLaunchArgument(
-        'arm_robot_ip',
+        'tm_robot_ip',
         default_value='192.168.1.2',
         description='Target robot IP address'
     )
 
     declare_use_simulation = DeclareLaunchArgument(
-        'arm_use_simulation',
+        'tm_use_simulation',
         default_value='false',
         description='Use simulation mode (true/false)'
     )
@@ -48,8 +48,8 @@ def generate_launch_description():
             os.path.join(get_package_share_directory('tm_driver'), 'launch', 'tm_bringup.launch.py')
         ),
         launch_arguments={
-            'robot_ip': arm_robot_ip,
-            'use_simulation': arm_use_simulation,
+            'tm_robot_ip': tm_robot_ip,
+            'tm_use_simulation': tm_use_simulation,
         }.items(),
     )
 

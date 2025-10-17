@@ -64,7 +64,7 @@ ros2 launch moma_ros ld250_tm12x.launch.py use_rviz:=true
 
 ```bash
 source install/setup.bash
-ros2 launch moma_ros ld250_tm12x.launch.py arm_use_simulation:=true
+ros2 launch moma_ros ld250_tm12x.launch.py tm_use_simulation:=true
 ```
 
 ## Docker
