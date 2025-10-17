@@ -119,8 +119,3 @@ COPY docker/ros_entrypoint.sh ros_entrypoint.sh
 RUN chmod +x /ros_entrypoint.sh
 
 ENTRYPOINT [ "/ros_entrypoint.sh" ]
-
-CMD ros2 launch moma_ros ld250_tm12x.launch.py --ros-args --remap arm_use_simulation:=${ARM_USE_SIMULATION} \
-                                                                    use_rviz:=${USE_RVIZ} \
-                                                                    use_moveit:=${USE_MOVEIT} \
-                                                                    use_nav2:=${USE_NAV2}
