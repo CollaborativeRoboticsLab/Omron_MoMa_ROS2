@@ -8,23 +8,28 @@
   <xacro:arg name="base_prefix" default=""/>
   <xacro:arg name="arm_color" default="none"/>
   <xacro:arg name="trans_hw_iface" default="hardware_interface/PositionJointInterface"/>
-  <xacro:arg name="arm_mount_xyz" default="0 0 0"/>
-  <xacro:arg name="arm_mount_rpy" default="0 0 0"/>
   <!-- If the TM base link name differs, change this (commonly 'base_link') -->
   <xacro:arg name="arm_base_link" default="base_link"/>
 
+  <!-- =============================================================== -->
+  <!--                   LD250 related configuration                   -->
+  <!-- =============================================================== -->
+
   <!-- Includes -->
-  <xacro:include filename="$(find amr_description)/xacro/ld250.urdf.xacro"/>
+  <xacro:include filename="$(find amr_description)/xacro/ld250.urdf.xacro"/>  
+  
+  <!-- LD250 mobile base -->
+  <xacro:ld250 prefix="$(arg base_prefix)" mesh_pkg="amr_description"/>
+
+  <!-- =============================================================== -->
+  <!--                   TM12x related configuration                   -->
+  <!-- =============================================================== -->
 
   <!-- TM12x macro set -->
   <xacro:include filename="$(find tm_description)/xacro/macro.gazebo.xacro" />
   <xacro:include filename="$(find tm_description)/xacro/macro.transmission.xacro" />
   <xacro:include filename="$(find tm_description)/xacro/macro.materials.xacro" />
   <xacro:include filename="$(find tm_description)/xacro/macro.tm12x-nominal.urdf.xacro" />
-
-
-  <!-- LD250 mobile base -->
-  <xacro:ld250 prefix="$(arg base_prefix)" mesh_pkg="amr_description"/>
 
   <!-- TM12x arm (gazebo/transmission/material macros) -->
   <xacro:tmr_gazebo ns="$(arg ns)" prefix="$(arg arm_prefix)" />
@@ -33,20 +38,67 @@
 
   <!-- TM12x geometry -->
   <xacro:property name="arm_color_val" value="$(arg arm_color)"/>
+  <!-- If the arm color is 'none' -->
   <xacro:if value="${arm_color_val == 'none'}">
     <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)"/>
   </xacro:if>
-
   <!-- If the arm color is not 'none', include the colored version -->
   <xacro:unless value="${arm_color_val == 'none'}">
     <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)" color="$(arg arm_color)" format="stl"/>
   </xacro:unless>
 
-  <!-- Mount the TM12x base to the LD250 base_link -->
-  <joint name="ld250_to_tm12x_mount" type="fixed">
+  <!-- =============================================================== -->
+  <!--             TM12x Control box related configuration             -->
+  <!-- =============================================================== -->
+
+  <link name="controlbox">
+    <visual>
+      <geometry>
+        <mesh filename="package://${mesh_pkg}/meshes/controlbox/LD250.obj"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://${mesh_pkg}/meshes/controlbox/LD250.obj"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="4.07"/>
+      <inertia ixx="0.426" ixy="0.0" ixz="0.0" iyy="0.496" iyz="0.0" izz="0.91"/>
+    </inertial>
+  </link>
+
+  <!-- =============================================================== -->
+  <!--                Joint Connection configuration                   -->
+  <!-- =============================================================== -->
+
+  <!-- Mount the TM12x control box base to the LD250 base_link -->
+  <joint name="ld250_to_controlbox" type="fixed">
     <parent link="$(arg base_prefix)base_link"/>
-    <child link="$(arg arm_prefix)$(arg arm_base_link)"/>
-    <origin xyz="$(arg arm_mount_xyz)" rpy="$(arg arm_mount_rpy)"/>
+    <child link="controlbox"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
+  <!-- Mount the TM12x base to TM12x control box base -->
+  <joint name="controlbox_to_tm12x_mount" type="fixed">
+    <parent link="controlbox"/>
+    <child link="$(arg arm_prefix)base"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!--
+    Dimensions:
+    - base length: 950 mm
+    - base width: 696 mm
+    - base height: 340 mm
+    - arm base offset front: 175 mm
+    - arm base offset back: 570 mm
+    - arm base offset left: 245 mm
+    - arm base offset right: 250 mm
+    - arm base bottom from ld250 top: 320 mm
+    - control box height: 325 mm
+  -->
 </robot>
