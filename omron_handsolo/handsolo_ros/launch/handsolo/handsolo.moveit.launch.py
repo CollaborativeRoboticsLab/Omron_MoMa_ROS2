@@ -1,13 +1,12 @@
 import os
 import sys
-
-from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch_ros.actions import Node
-
-import xacro
 import yaml
-
+import json
+import xacro
+from launch import LaunchDescription
+from launch.substitutions import Command
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
 
 def load_file(package_name, file_path):
     package_path = get_package_share_directory(package_name)
@@ -16,9 +15,8 @@ def load_file(package_name, file_path):
     try:
         with open(absolute_file_path, 'r') as file:
             return file.read()
-    except OSError:  # parent of IOError, OSError *and* WindowsError where available
+    except EnvironmentError: # parent of IOError, OSError *and* WindowsError where available
         return None
-
 
 def load_yaml(package_name, file_path):
     package_path = get_package_share_directory(package_name)
@@ -29,33 +27,26 @@ def load_yaml(package_name, file_path):
             return yaml.safe_load(file)
     except OSError:  # parent of IOError, OSError *and* WindowsError where available
         return None
-
-
+        
 def generate_launch_description():
-
     # Configure robot_description
-    description_path = 'tm_description'
-    xacro_path = 'handsolo.urdf.xacro'
-    moveit_config_path = 'tm12x_moveit_config'    
-    srdf_path = 'config/tm12x.srdf'
-    rviz_path = '/rviz/run_move_group.rviz'
-    
     robot_description_config = xacro.process_file(
         os.path.join(
-            get_package_share_directory(description_path),
+            get_package_share_directory('handsolo_description'),
             'xacro',
-            xacro_path,
+            'handsolo.urdf.xacro',
         )
     )
     robot_description = {'robot_description': robot_description_config.toxml()}
 
     # SRDF Configuration
-    robot_description_semantic_config = load_file(moveit_config_path, srdf_path)
+    robot_description_semantic_config = load_file('tm12x_moveit_config'  , 'config/tm12x.srdf')
     robot_description_semantic = {'robot_description_semantic': robot_description_semantic_config}
 
     # Kinematics
-    kinematics_yaml = load_yaml(moveit_config_path, 'config/kinematics.yaml')
+    kinematics_yaml = load_yaml('tm12x_moveit_config'  , 'config/kinematics.yaml')
     robot_description_kinematics = {'robot_description_kinematics': kinematics_yaml}
+
 
     # Planning Configuration
     ompl_planning_pipeline_config = {
@@ -70,12 +61,12 @@ def generate_launch_description():
             'start_state_max_bounds_error': 0.1,
         },
     }
-    ompl_planning_yaml = load_yaml(moveit_config_path, 'config/ompl_planning.yaml')
+
+    ompl_planning_yaml = load_yaml('tm12x_moveit_config'  , 'config/ompl_planning.yaml')
     ompl_planning_pipeline_config['ompl'].update(ompl_planning_yaml)
 
-    # Trajectory Execution Configuration
-    # Controllers
-    controllers_yaml = load_yaml(moveit_config_path, 'config/controllers.yaml')
+    # Trajectory Execution Configuration -> Controllers
+    controllers_yaml = load_yaml('tm12x_moveit_config', 'config/controllers.yaml')
     moveit_controllers = {
         'moveit_simple_controller_manager': controllers_yaml, 
         'moveit_controller_manager': 'moveit_simple_controller_manager/MoveItSimpleControllerManager'
@@ -100,7 +91,7 @@ def generate_launch_description():
     # Joint limits
     joint_limits_yaml = {
         'robot_description_planning': load_yaml(
-            moveit_config_path, 'config/joint_limits.yaml'
+            'tm12x_moveit_config', 'config/joint_limits.yaml'
         )
     }
 
@@ -123,29 +114,8 @@ def generate_launch_description():
         ],
     )
 
-    # RViz configuration
-    rviz_config_file = (
-        get_package_share_directory(moveit_config_path) + rviz_path
-    )
-    
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='log',
-        emulate_tty=True,
-        arguments=['-d', rviz_config_file],
-        parameters=[
-            robot_description,
-            robot_description_semantic,
-            ompl_planning_pipeline_config,
-            robot_description_kinematics,
-            joint_limits_yaml,
-        ],
-    )
-
-    # Static TF
-    static_tf = Node(
+    # Virtual Hand Solo to Base Link  Static TF
+    static_tf_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_transform_publisher',
@@ -153,11 +123,10 @@ def generate_launch_description():
         arguments=['0.0', '0.0', '0.0', '0.0', '0.0', '0.0', 'virtual_hand_solo/base_link', 'base']
     )
 
-    # Launching all the nodes
-    return LaunchDescription(
-        [
-            rviz_node,
-            static_tf,
-            run_move_group_node
-        ]
-    )
+
+    return LaunchDescription([
+        run_move_group_node,
+        static_tf_node
+        ])
+
+    

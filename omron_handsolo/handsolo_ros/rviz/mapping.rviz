@@ -87,7 +87,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /odom
+        Value: /virtual_hand_solo/odom
       Value: true
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
@@ -140,7 +140,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /scan
+        Value: /virtual_hand_solo/scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true

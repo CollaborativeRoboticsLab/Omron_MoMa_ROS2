@@ -33,8 +33,14 @@ def load_yaml(package_name, file_path):
 
 def generate_launch_description():
     # Configure robot_description
-    robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
-    robot_description = {'robot_description' : robot_description_config}
+    robot_description_config = xacro.process_file(
+        os.path.join(
+            get_package_share_directory('handsolo_description'),
+            'xacro',
+            'handsolo.urdf.xacro',
+        )
+    )
+    robot_description = {'robot_description': robot_description_config.toxml()}
 
     # SRDF Configuration
     robot_description_semantic_config = load_file('tm12x_moveit_config'  , 'config/tm12x.srdf')
@@ -45,7 +51,11 @@ def generate_launch_description():
         'planning_pipelines': ['ompl'],
         'ompl': {
             'planning_plugin': 'ompl_interface/OMPLPlanner',
-            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
+            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization 
+                                   default_planner_request_adapters/FixWorkspaceBounds 
+                                   default_planner_request_adapters/FixStartStateBounds 
+                                   default_planner_request_adapters/FixStartStateCollision 
+                                   default_planner_request_adapters/FixStartStatePathConstraints""",
             'start_state_max_bounds_error': 0.1,
         },
     }
@@ -55,8 +65,8 @@ def generate_launch_description():
     robot_description_kinematics = {'robot_description_kinematics': kinematics_yaml}
 
     # RViz configurations
-    moveit_rviz_config = PathJoinSubstitution([FindPackageShare('moma_ros'), 'rviz', 'ld250_tm12x-moveit.rviz'])
-    nav2_rviz_cfg = PathJoinSubstitution([FindPackageShare('moma_ros'), 'rviz', 'ld250_tm12x-nav2.rviz'])
+    moveit_rviz_config = PathJoinSubstitution([FindPackageShare('handsolo_ros'), 'rviz', 'handsolo-moveit.rviz'])
+    nav2_rviz_cfg = PathJoinSubstitution([FindPackageShare('handsolo_ros'), 'rviz', 'handsolo-nav2.rviz'])
 
     # Joint limits
     joint_limits_yaml = {'robot_description_planning': load_yaml('tm12x_moveit_config', 'config/joint_limits.yaml')}

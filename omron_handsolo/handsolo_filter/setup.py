@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'moma_filter'
+package_name = 'handsolo_filter'
 
 setup(
     name=package_name,
@@ -24,7 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'velocity_filter = moma_filter.velocity_filter:main'
+            'velocity_filter = handsolo_filter.velocity_filter:main'
         ],
     },
 )
