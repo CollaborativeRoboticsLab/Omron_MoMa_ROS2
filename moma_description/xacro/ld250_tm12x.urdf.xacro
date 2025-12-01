@@ -4,11 +4,10 @@
 
   <!-- Arguments -->
   <xacro:arg name="ns" default=""/>
-  <xacro:arg name="arm_prefix" default="tm_"/>
+  <xacro:arg name="arm_prefix" default=""/>
   <xacro:arg name="base_prefix" default=""/>
   <xacro:arg name="arm_color" default="none"/>
   <xacro:arg name="trans_hw_iface" default="hardware_interface/PositionJointInterface"/>
-  <!-- If the TM base link name differs, change this (commonly 'base_link') -->
   <xacro:arg name="arm_base_link" default="base_link"/>
 
   <!-- =============================================================== -->
@@ -53,6 +52,7 @@
 
   <link name="controlbox">
     <visual>
+      <origin rpy="0 0 3.141582654" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://${mesh_pkg}/meshes/controlbox/LD250.obj"/>
       </geometry>
@@ -61,6 +61,7 @@
       </material>
     </visual>
     <collision>
+      <origin rpy="0 0 3.141592654" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://${mesh_pkg}/meshes/controlbox/LD250.obj"/>
       </geometry>
@@ -79,14 +80,14 @@
   <joint name="ld250_to_controlbox" type="fixed">
     <parent link="$(arg base_prefix)base_link"/>
     <child link="controlbox"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0.2 0 0.34" rpy="0 0 0"/>
   </joint>
 
   <!-- Mount the TM12x base to TM12x control box base -->
   <joint name="controlbox_to_tm12x_mount" type="fixed">
     <parent link="controlbox"/>
     <child link="$(arg arm_prefix)base"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0.325" rpy="0 0 0"/>
   </joint>
 
   <!--
