@@ -4,11 +4,14 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="ld250_tm12x">
+  <!-- =============================================================== -->
+  <!--                   LD250 related configuration                   -->
+  <!-- =============================================================== -->
   <!--
     Updated to match LD250.urdf:
     - Adds laser_frame link
     - Adds base_link_to_laser_frame fixed joint at xyz="0.45 0 0.195"
-    - Keeps main_body mesh, inertial, and fixed joints
+    - Keeps amr_base mesh, inertial, and fixed joints
   -->
   <!-- Materials (prefixed to avoid name collisions when instantiating multiple robots) -->
   <material name="blue">
@@ -21,15 +24,18 @@
     <color rgba="1 1 1 1"/>
   </material>
   <!-- Base link -->
-  <link name="base_link"/>
+  <link name="base_link">
+    </link>
   <!-- Main body with mesh -->
-  <link name="main_body">
+  <link name="amr_base">
     <visual>
       <origin rpy="0 0 3.141582654" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://amr_description/meshes/LD250.obj"/>
       </geometry>
-      <material name="white"/>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1.0"/>
+      </material>
     </visual>
     <collision>
       <origin rpy="0 0 3.141592654" xyz="0 0 0"/>
@@ -42,14 +48,15 @@
       <inertia ixx="0.426" ixy="0.0" ixz="0.0" iyy="0.496" iyz="0.0" izz="0.91"/>
     </inertial>
   </link>
-  <!-- Base to main body fixed joint -->
-  <joint name="main_body_to_base" type="fixed">
+  <!-- Base link to main body fixed joint -->
+  <joint name="amr_base_to_base_link" type="fixed">
     <parent link="base_link"/>
-    <child link="main_body"/>
+    <child link="amr_base"/>
     <origin xyz="0 0 0"/>
   </joint>
   <!-- Laser frame -->
-  <link name="laser_frame"/>
+  <link name="laser_frame">
+    </link>
   <!-- Base to laser frame fixed joint (matches LD250.urdf) -->
   <joint name="base_link_to_laser_frame" type="fixed">
     <parent link="base_link"/>
@@ -60,27 +67,31 @@
       Dimensions (from LD250.urdf comments):
       - length: 950 mm
       - width: 696 mm
+      - base height: 340 mm
       - laser glass offset front: 20 mm
       - laser glass offset back: 120 mm
       - laser glass bottom height: 180 mm
       - laser glass top height: 210 mm
     -->
-  <gazebo reference="tm_link_1">
+  <!-- =============================================================== -->
+  <!--                   TM12x related configuration                   -->
+  <!-- =============================================================== -->
+  <gazebo reference="link_1">
     <selfCollide>true</selfCollide>
   </gazebo>
-  <gazebo reference="tm_link_2">
+  <gazebo reference="link_2">
     <selfCollide>true</selfCollide>
   </gazebo>
-  <gazebo reference="tm_link_3">
+  <gazebo reference="link_3">
     <selfCollide>true</selfCollide>
   </gazebo>
-  <gazebo reference="tm_link_4">
+  <gazebo reference="link_4">
     <selfCollide>true</selfCollide>
   </gazebo>
-  <gazebo reference="tm_link_5">
+  <gazebo reference="link_5">
     <selfCollide>true</selfCollide>
   </gazebo>
-  <gazebo reference="tm_link_6">
+  <gazebo reference="link_6">
     <selfCollide>true</selfCollide>
   </gazebo>
   <gazebo>
@@ -89,57 +100,57 @@
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
-  <transmission name="tm_trans_1">
+  <transmission name="trans_1">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="tm_joint_1">
+    <joint name="joint_1">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="tm_motor_1">
+    <actuator name="motor_1">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="tm_trans_2">
+  <transmission name="trans_2">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="tm_joint_2">
+    <joint name="joint_2">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="tm_motor_2">
+    <actuator name="motor_2">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="tm_trans_3">
+  <transmission name="trans_3">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="tm_joint_3">
+    <joint name="joint_3">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="tm_motor_3">
+    <actuator name="motor_3">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="tm_trans_4">
+  <transmission name="trans_4">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="tm_joint_4">
+    <joint name="joint_4">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="tm_motor_4">
+    <actuator name="motor_4">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="tm_trans_5">
+  <transmission name="trans_5">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="tm_joint_5">
+    <joint name="joint_5">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="tm_motor_5">
+    <actuator name="motor_5">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  <transmission name="tm_trans_6">
+  <transmission name="trans_6">
     <type>transmission_interface/SimpleTransmission</type>
-    <joint name="tm_joint_6">
+    <joint name="joint_6">
       <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
     </joint>
-    <actuator name="tm_motor_6">
+    <actuator name="motor_6">
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
@@ -183,7 +194,7 @@
     <color rgba="0.3 0.3 0.25 1.0"/>
   </material>
   <!--LinkDescription-->
-  <link name="tm_link_0">
+  <link name="link_0">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm12/visual/tm12-base.obj"/>
@@ -201,16 +212,16 @@
       <inertia ixx="0.00110833289" ixy="0.0" ixz="0.0" iyy="0.00110833289" iyz="0.0" izz="0.0018"/>
     </inertial>
   </link>
-  <joint name="tm_joint_1" type="revolute">
-    <parent link="tm_link_0"/>
-    <child link="tm_link_1"/>
+  <joint name="joint_1" type="revolute">
+    <parent link="link_0"/>
+    <child link="link_1"/>
     <origin rpy="0.000000 -0.000000 0.000000" xyz="0.000000 0.000000 0.165200"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
     <limit effort="353" lower="-6.283185307179586" upper="6.283185307179586" velocity="2.0943951023931953"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
-  <link name="tm_link_1">
+  <link name="link_1">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm12/visual/tmr_750w_01.obj"/>
@@ -228,16 +239,16 @@
       <inertia ixx="0.020289334" ixy="0.000000" ixz="0.000000" iyy="0.020289334" iyz="0.000000" izz="0.021396270999999998"/>
     </inertial>
   </link>
-  <joint name="tm_joint_2" type="revolute">
-    <parent link="tm_link_1"/>
-    <child link="tm_link_2"/>
+  <joint name="joint_2" type="revolute">
+    <parent link="link_1"/>
+    <child link="link_2"/>
     <origin rpy="-1.570796 -1.570796 0.000000" xyz="0.000000 0.000000 0.000000"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
     <limit effort="353" lower="-6.283185307179586" upper="6.283185307179586" velocity="2.0943951023931953"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
-  <link name="tm_link_2">
+  <link name="link_2">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm12/visual/tm12-arm1.obj"/>
@@ -255,16 +266,16 @@
       <inertia ixx="0.071505715" ixy="0.000000" ixz="0.000000" iyy="1.1758788999999998" iyz="0.000000" izz="1.2033932999999999"/>
     </inertial>
   </link>
-  <joint name="tm_joint_3" type="revolute">
-    <parent link="tm_link_2"/>
-    <child link="tm_link_3"/>
+  <joint name="joint_3" type="revolute">
+    <parent link="link_2"/>
+    <child link="link_3"/>
     <origin rpy="0.000000 -0.000000 0.000000" xyz="0.636100 0.000000 0.000000"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
     <limit effort="157" lower="-2.897246558310587" upper="2.897246558310587" velocity="3.141592653589793"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
-  <link name="tm_link_3">
+  <link name="link_3">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm12/visual/tm12-arm2.obj"/>
@@ -282,16 +293,16 @@
       <inertia ixx="0.009755469" ixy="0.000000" ixz="0.000000" iyy="0.16334719" iyz="0.000000" izz="0.16656678"/>
     </inertial>
   </link>
-  <joint name="tm_joint_4" type="revolute">
-    <parent link="tm_link_3"/>
-    <child link="tm_link_4"/>
+  <joint name="joint_4" type="revolute">
+    <parent link="link_3"/>
+    <child link="link_4"/>
     <origin rpy="0.000000 -0.000000 1.570796" xyz="0.557900 0.000000 -0.156300"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
     <limit effort="54" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.141592653589793"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
-  <link name="tm_link_4">
+  <link name="link_4">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_100w_01.obj"/>
@@ -309,16 +320,16 @@
       <inertia ixx="0.002058405" ixy="0.000000" ixz="0.000000" iyy="0.0025630790000000002" iyz="0.000000" izz="0.00264321"/>
     </inertial>
   </link>
-  <joint name="tm_joint_5" type="revolute">
-    <parent link="tm_link_4"/>
-    <child link="tm_link_5"/>
+  <joint name="joint_5" type="revolute">
+    <parent link="link_4"/>
+    <child link="link_5"/>
     <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.106000 0.000000"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
     <limit effort="54" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.141592653589793"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
-  <link name="tm_link_5">
+  <link name="link_5">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_100w_02.obj"/>
@@ -336,16 +347,16 @@
       <inertia ixx="0.002058405" ixy="0.000000" ixz="0.000000" iyy="0.0025630790000000002" iyz="0.000000" izz="0.00264321"/>
     </inertial>
   </link>
-  <joint name="tm_joint_6" type="revolute">
-    <parent link="tm_link_5"/>
-    <child link="tm_link_6"/>
+  <joint name="joint_6" type="revolute">
+    <parent link="link_5"/>
+    <child link="link_6"/>
     <origin rpy="1.570796 -0.000000 0.000000" xyz="0.000000 -0.113150 0.000000"/>
     <axis xyz="0 0 1"/>
     <!--limit-->
     <limit effort="54" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.141592653589793"/>
     <dynamics damping="0.0" friction="0.0"/>
   </joint>
-  <link name="tm_link_6">
+  <link name="link_6">
     <visual>
       <geometry>
         <mesh filename="package://tm_description/meshes/tm5-900/visual/tmr_iox.obj"/>
@@ -363,23 +374,68 @@
       <inertia ixx="0.000226642" ixy="0.000000" ixz="0.000000" iyy="0.000226642" iyz="0.000000" izz="0.000286595"/>
     </inertial>
   </link>
-  <link name="tm_base"/>
-  <joint name="tm_base_fixed_joint" type="fixed">
-    <parent link="tm_base"/>
-    <child link="tm_link_0"/>
+  <link name="base"/>
+  <joint name="base_fixed_joint" type="fixed">
+    <parent link="base"/>
+    <child link="link_0"/>
     <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
   </joint>
-  <link name="tm_flange"/>
-  <joint name="tm_flange_fixed_joint" type="fixed">
-    <parent link="tm_link_6"/>
-    <child link="tm_flange"/>
+  <link name="flange"/>
+  <joint name="flange_fixed_joint" type="fixed">
+    <parent link="link_6"/>
+    <child link="flange"/>
     <origin rpy="0.000000 0.000000 0.000000" xyz="0.000000 0.000000 0.000000"/>
   </joint>
   <!--LinkDescription-->
-  <!-- Mount the TM12x base to the LD250 base_link -->
-  <joint name="ld250_to_tm12x_mount" type="fixed">
+  <!-- =============================================================== -->
+  <!--             TM12x Control box related configuration             -->
+  <!-- =============================================================== -->
+  <link name="controlbox">
+    <visual>
+      <origin rpy="0 0 3.141582654" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://moma_description/meshes/controlbox/LD250.obj"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 3.141592654" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://moma_description/meshes/controlbox/LD250.obj"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="4.07"/>
+      <inertia ixx="0.426" ixy="0.0" ixz="0.0" iyy="0.496" iyz="0.0" izz="0.91"/>
+    </inertial>
+  </link>
+  <!-- =============================================================== -->
+  <!--                Joint Connection configuration                   -->
+  <!-- =============================================================== -->
+  <!-- Mount the TM12x control box base to the LD250 base_link -->
+  <joint name="ld250_to_controlbox" type="fixed">
     <parent link="base_link"/>
-    <child link="tm_base_link"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <child link="controlbox"/>
+    <origin rpy="0 0 0" xyz="0.2 0 0.34"/>
   </joint>
+  <!-- Mount the TM12x base to TM12x control box base -->
+  <joint name="controlbox_to_tm12x_mount" type="fixed">
+    <parent link="controlbox"/>
+    <child link="base"/>
+    <origin rpy="0 0 0" xyz="0 0 0.325"/>
+  </joint>
+  <!--
+    Dimensions:
+    - base length: 950 mm
+    - base width: 696 mm
+    - base height: 340 mm
+    - arm base offset front: 175 mm
+    - arm base offset back: 570 mm
+    - arm base offset left: 245 mm
+    - arm base offset right: 250 mm
+    - arm base bottom from ld250 top: 320 mm
+    - control box height: 325 mm
+  -->
 </robot>

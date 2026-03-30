@@ -9,6 +9,7 @@
   <xacro:arg name="arm_color" default="none"/>
   <xacro:arg name="trans_hw_iface" default="hardware_interface/PositionJointInterface"/>
   <xacro:arg name="arm_base_link" default="base_link"/>
+  <xacro:arg name="controlbox_mesh_pkg" default="moma_description"/>
 
   <!-- =============================================================== -->
   <!--                   LD250 related configuration                   -->
@@ -54,7 +55,7 @@
     <visual>
       <origin rpy="0 0 3.141582654" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://${mesh_pkg}/meshes/controlbox/LD250.obj"/>
+        <mesh filename="package://$(arg controlbox_mesh_pkg)/meshes/controlbox/LD250.obj"/>
       </geometry>
       <material name="white">
         <color rgba="1 1 1 1"/>
@@ -63,7 +64,7 @@
     <collision>
       <origin rpy="0 0 3.141592654" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="package://${mesh_pkg}/meshes/controlbox/LD250.obj"/>
+        <mesh filename="package://$(arg controlbox_mesh_pkg)/meshes/controlbox/LD250.obj"/>
       </geometry>
     </collision>
     <inertial>
