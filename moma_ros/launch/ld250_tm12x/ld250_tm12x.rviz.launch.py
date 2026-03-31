@@ -36,11 +36,12 @@ def generate_launch_description():
     # robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
     # robot_description = {'robot_description' : robot_description_config}
 
+    # Configure robot_description
     robot_description_config = xacro.process_file(
         os.path.join(
-            get_package_share_directory('tm_description'),
+            get_package_share_directory('moma_description'),
             'xacro',
-            'handsolo.urdf.xacro',
+            'ld250_tm12x.urdf.xacro',
         )
     )
     robot_description = {'robot_description': robot_description_config.toxml()}
@@ -63,18 +64,12 @@ def generate_launch_description():
     kinematics_yaml = load_yaml('tm12x_moveit_config'  , 'config/kinematics.yaml')
     robot_description_kinematics = {'robot_description_kinematics': kinematics_yaml}
 
+    # RViz configurations
+    moveit_rviz_config = PathJoinSubstitution([FindPackageShare('moma_ros'), 'rviz', 'ld250_tm12x-moveit.rviz'])
+    nav2_rviz_cfg = PathJoinSubstitution([FindPackageShare('moma_ros'), 'rviz', 'ld250_tm12x-nav2.rviz'])
 
-    # RViz configuration
-    moveit_rviz_config_file = (
-        get_package_share_directory("moma_ros") + "/rviz/ld250_tm12x-moveit.rviz"
-    )
-    
     # Joint limits
-    joint_limits_yaml = {
-        'robot_description_planning': load_yaml(
-            'tm12x_moveit_config', 'config/joint_limits.yaml'
-        )
-    }
+    joint_limits_yaml = {'robot_description_planning': load_yaml('tm12x_moveit_config', 'config/joint_limits.yaml')}
 
     # RViz
     moveit_rviz_node = Node(
@@ -83,7 +78,7 @@ def generate_launch_description():
         name='rviz2',
         output='log',
         emulate_tty=True,
-        arguments=['-d', moveit_rviz_config_file],
+        arguments=['-d', moveit_rviz_config],
         parameters=[
             robot_description,
             robot_description_semantic,
@@ -93,10 +88,7 @@ def generate_launch_description():
         ],
     )
 
-
-    nav2_rviz_cfg = PathJoinSubstitution([FindPackageShare('moma_ros'), 'rviz', 'ld250_tm12x-nav2.rviz'])
-
-        # RViz2
+    # RViz2
     nav2_rviz_node = Node(
         package='rviz2',
         executable='rviz2',

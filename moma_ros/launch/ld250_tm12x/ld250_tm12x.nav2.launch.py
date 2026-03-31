@@ -7,7 +7,6 @@ from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
     # File paths
-    map_yaml = PathJoinSubstitution([FindPackageShare('moma_ros'), 'map', 'warehouse_01.yaml'])
     nav2_params = PathJoinSubstitution([FindPackageShare('moma_ros'), 'config', 'ld250_tm12x-nav2.yaml'])
     
     # Launch arguments (optional - for flexibility)
@@ -18,33 +17,6 @@ def generate_launch_description():
         'use_sim_time',
         default_value='false',
         description='Use simulation time'
-    )
-
-    # Static transform publisher
-    static_tf = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='static_base_to_lidar',
-        arguments=[
-            '0', '0', '0',           # x y z
-            '1', '0', '0', '0',      # qx qy qz qw 
-            'virtual_hand_solo/base_link',
-            'virtual_hand_solo/lidar_link'
-        ]
-    )
-
-    # Map Server - Lifecycle Node
-    map_server = LifecycleNode(
-        package='nav2_map_server',
-        executable='map_server',
-        name='map_server',
-        namespace='',
-        output='screen',
-        parameters=[
-            nav2_params,
-            {'yaml_filename': map_yaml,
-             'use_sim_time': use_sim_time}
-        ]
     )
 
     # AMCL - Lifecycle Node
@@ -151,7 +123,7 @@ def generate_launch_description():
         parameters=[
             {'use_sim_time': use_sim_time},
             {'autostart': True},
-            {'node_names': ['map_server', 'amcl']}
+            {'node_names': ['amcl']}
         ]
     )
 
@@ -177,8 +149,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_use_sim_time,
-        static_tf,
-        map_server,
         amcl,
         lifecycle_manager_localization,
         controller_server,

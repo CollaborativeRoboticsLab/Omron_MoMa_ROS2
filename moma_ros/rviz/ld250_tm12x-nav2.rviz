@@ -78,11 +78,11 @@ Visualization Manager:
         All Enabled: false
         map:
           Value: true
-        virtual_hand_solo/base_link:
+        base_link:
           Value: true
-        virtual_hand_solo/lidar_link:
+        lidar_link:
           Value: true
-        virtual_hand_solo/odom:
+        odom:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -91,9 +91,9 @@ Visualization Manager:
       Show Names: false
       Tree:
         map:
-          virtual_hand_solo/odom:
-            virtual_hand_solo/base_link:
-              virtual_hand_solo/lidar_link:
+          odom:
+            base_link:
+              lidar_link:
                 {}
       Update Interval: 0
       Value: true
@@ -127,7 +127,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Best Effort
-        Value: /virtual_hand_solo/scan
+        Value: /scan
       Use Fixed Frame: true
       Use rainbow: true
       Value: true

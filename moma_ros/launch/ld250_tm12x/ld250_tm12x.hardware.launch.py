@@ -74,19 +74,10 @@ def generate_launch_description():
         condition=IfCondition(robot_description_override)
     )
 
-    # Velocity filter node
-    filter_node = Node(
-        package='moma_filter',
-        executable='velocity_filter',
-        name='velocity_filter',
-        output='screen'
-    )
-
     return LaunchDescription([
         declare_robot_ip,
         declare_use_simulation,
         declare_robot_description_override,
         tm_driver_launch,
-        amr_core_launch,
-        filter_node
+        amr_core_launch
     ])
