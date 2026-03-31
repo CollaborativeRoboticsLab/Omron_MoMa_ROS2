@@ -52,10 +52,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-joy \
  && rm -rf /var/lib/apt/lists/*
 
-RUN python -m pip config set global.break-system-packages true
-
 # Install python packages
-RUN pip3 install --no-cache-dir pymodbus
+RUN pip3 install --break-system-packages --no-cache-dir pymodbus
 
 #############################################################################################################################
 #####
