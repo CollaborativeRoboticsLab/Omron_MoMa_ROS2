@@ -14,8 +14,7 @@ For supported features and limitations, see the individual repositories on the f
 |--------|--------------|---------|
 | main | Jazzy | [![main](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml/badge.svg?branch=main)](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml?query=branch%3Amain) |
 | develop | Jazzy | [![develop](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml/badge.svg?branch=develop)](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml?query=branch%3Adevelop) |
-| humble | Humble | - |
-
+| humble | Humble | [![humble](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml/badge.svg?branch=humble)](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml?query=branch%3Ahumble) |
 ## Device Configuration
 
 The robot expects the remote PC to be configured with the following IP address to connect to the robot,
