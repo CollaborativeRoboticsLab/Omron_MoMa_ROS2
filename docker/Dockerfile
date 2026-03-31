@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------------------------------------------------------
 
 # Use a base image suitable for Raspberry Pi with ROS 2 Humble
-FROM ros:humble-ros-base-jammy AS base
+FROM ros:jazzy AS base
 
 # Set environment variables
 ENV DEBIAN_FRONTEND=noninteractive
@@ -65,8 +65,8 @@ RUN pip3 install --no-cache-dir pymodbus
 WORKDIR ${WORKSPACE_ROOT}/src
 
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_moma.git
-RUN git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git 
-RUN git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
+RUN git clone https://github.com/CollaborativeRoboticsLab/tmr_ros2.git 
+RUN git clone https://github.com/CollaborativeRoboticsLab/omron_amr.git
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 
 WORKDIR ${WORKSPACE_ROOT}

@@ -4,11 +4,17 @@ Original packages are from [OmronAPAC](https://github.com/OmronAPAC)
 
 This repository allows controlling the Base, Arm and Gripper of the Omron Mobile Manipulator using packages,
 
-- [omron_arm](https://github.com/CollaborativeRoboticsLab/omron_arm) package 
-- [omron_base](https://github.com/CollaborativeRoboticsLab/omron_base) package
+- [tmr_ros2](https://github.com/CollaborativeRoboticsLab/tmr_ros2) package 
+- [omron_amr](https://github.com/CollaborativeRoboticsLab/omron_amr) package
 - [omron_gripper](https://github.com/CollaborativeRoboticsLab/omron_gripper.git) package
 
 For supported features and limitations, see the individual repositories on the features supported by the MoMa.
+
+| Branch | ROS2 Version | Compile |
+|--------|--------------|---------|
+| main | Jazzy | [![main](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml/badge.svg?branch=main)](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml?query=branch%3Amain) |
+| develop | Jazzy | [![develop](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml/badge.svg?branch=develop)](https://github.com/CollaborativeRoboticsLab/omron_moma/actions/workflows/compile.yml?query=branch%3Adevelop) |
+| humble | Humble | - |
 
 ## Device Configuration
 
@@ -37,8 +43,8 @@ pip install pymodbus
 Clone the repositories into the `src` folder by
 
 ```sh
-git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git
-git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
+git clone https://github.com/CollaborativeRoboticsLab/tmr_ros2.git
+git clone https://github.com/CollaborativeRoboticsLab/omron_amr.git
 git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 git clone https://github.com/CollaborativeRoboticsLab/omron_moma.git
 ```
@@ -52,34 +58,55 @@ colcon build
 
 **or save time and use devcontainer** 
 
+## Launch Parameters
+
+The top-level launch entry point is `ros2 launch moma_ros ld250_tm12x.launch.py`.
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `tm_use_simulation` | `false` | Runs the TM arm bringup in simulation mode instead of connecting to the physical arm. |
+| `tm_robot_ip` | `192.168.1.2` | IP address of the TM arm controller. |
+| `use_arm` | `true` | Starts the TM arm hardware stack. If `false`, the arm hardware and MoveIt are not started. |
+| `use_base` | `true` | Starts the AMR base hardware stack. If `false`, the base hardware and Nav2 are not started. |
+| `use_rviz` | `false` | Starts RViz. When enabled, the launch automatically chooses the MoveIt RViz layout if the arm and MoveIt are active, otherwise it uses the Nav2 RViz layout. |
+| `use_moveit` | `true` | Starts MoveIt for the arm. This is only effective when `use_arm:=true`. |
+| `use_nav2` | `true` | Starts Nav2 for the mobile base. This is only effective when `use_base:=true`. |
+
 ## Usage
 
-### Start the system headless
+### Start the full system headless
 
 ```bash
 source install/setup.bash
 ros2 launch moma_ros ld250_tm12x.launch.py
 ```
 
-### Start the system with RVIZ
+### Start the full system with RVIZ
 
 ```bash
 source install/setup.bash
 ros2 launch moma_ros ld250_tm12x.launch.py use_rviz:=true
 ```
 
-### Start the system without Nav2 or Moveit to evaluate the Hardware connection
+### Start the full system without Nav2 or Moveit to evaluate the Hardware connection
 
 ```bash
 source install/setup.bash
 ros2 launch moma_ros ld250_tm12x.launch.py use_nav2:=false use_moveit:=false
 ```
 
-### Start the system without Nav2 to control just the Arm and Gripper using RVIZ
+### Start the ARM only to control Arm and Gripper using RVIZ
 
 ```bash
 source install/setup.bash
-ros2 launch moma_ros ld250_tm12x.launch.py use_nav2:=false use_rviz:=true
+ros2 launch moma_ros ld250_tm12x.launch.py use_base:=false use_rviz:=true
+```
+
+### Start the base only to control just the base using RVIZ
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py use_arm:=false use_rviz:=true
 ```
 
 ## Docker
