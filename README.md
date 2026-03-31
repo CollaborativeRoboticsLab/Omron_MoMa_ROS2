@@ -4,11 +4,17 @@ Original packages are from [OmronAPAC](https://github.com/OmronAPAC)
 
 This repository allows controlling the Base, Arm and Gripper of the Omron Mobile Manipulator using packages,
 
-- [omron_arm](https://github.com/CollaborativeRoboticsLab/omron_arm) package 
-- [omron_base](https://github.com/CollaborativeRoboticsLab/omron_base) package
+- [tmr_ros2](https://github.com/CollaborativeRoboticsLab/tmr_ros2) package 
+- [omron_amr](https://github.com/CollaborativeRoboticsLab/omron_amr) package
 - [omron_gripper](https://github.com/CollaborativeRoboticsLab/omron_gripper.git) package
 
 For supported features and limitations, see the individual repositories on the features supported by the MoMa.
+
+| Branch | ROS2 Version |
+|--------|--------------|
+| main | Jazzy |
+| develop | Jazzy |
+| humble | Humble |
 
 ## Device Configuration
 
@@ -37,8 +43,8 @@ pip install pymodbus
 Clone the repositories into the `src` folder by
 
 ```sh
-git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git
-git clone https://github.com/CollaborativeRoboticsLab/omron_base.git
+git clone https://github.com/CollaborativeRoboticsLab/tmr_ros2.git
+git clone https://github.com/CollaborativeRoboticsLab/omron_amr.git
 git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git
 git clone https://github.com/CollaborativeRoboticsLab/omron_moma.git
 ```

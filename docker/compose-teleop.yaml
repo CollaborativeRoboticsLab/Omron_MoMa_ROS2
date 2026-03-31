@@ -1,7 +1,7 @@
 services:
   omron_moma:
     container_name: omron_moma
-    image: ghcr.io/collaborativeroboticslab/omron_moma:humble
+    image: ghcr.io/collaborativeroboticslab/omron_moma:jazzy
     command: ros2 launch moma_ros ld250_tm12x.teleop.launch.py
     environment:
       - PYTHONUNBUFFERED=1                # GUI related

@@ -42,16 +42,15 @@ def get_moveit_config():
         )
         .joint_limits(
             file_path=os.path.join(
-                get_package_share_directory('moma_ros'),
+                get_package_share_directory('tm12x_moveit_config'),
                 'config',
-                'ld250_tm12x_joint_limits.yaml',
+                'joint_limits.yaml',
             )
         )
         .planning_pipelines(default_planning_pipeline='ompl', pipelines=['ompl'])
         .to_moveit_configs()
     )
-
-    moveit_config.planning_pipelines['ompl'] = load_yaml('moma_ros', 'config/ld250_tm12x_ompl_planning.yaml')
+    moveit_config.planning_pipelines['ompl'] = load_yaml('tm12x_moveit_config', 'config/ompl_planning.yaml')
     return moveit_config
         
 def generate_launch_description():
