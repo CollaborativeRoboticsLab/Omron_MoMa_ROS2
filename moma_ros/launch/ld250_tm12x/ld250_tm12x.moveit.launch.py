@@ -4,7 +4,6 @@ import yaml
 import json
 import xacro
 from launch import LaunchDescription
-from launch.substitutions import Command
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
@@ -30,18 +29,14 @@ def load_yaml(package_name, file_path):
         
 def generate_launch_description():
     # Configure robot_description
-    robot_description_config = load_file('moma_description', 'urdf/ld250_tm12x.urdf')
-    robot_description = {'robot_description' : robot_description_config}
-
-    # Configure robot_description
-    # robot_description_config = xacro.process_file(
-    #     os.path.join(
-    #         get_package_share_directory('moma_description'),
-    #         'xacro',
-    #         'ld250_tm12x.urdf.xacro',
-    #     )
-    # )
-    # robot_description = {'robot_description': robot_description_config.toxml()}
+    robot_description_config = xacro.process_file(
+        os.path.join(
+            get_package_share_directory('moma_description'),
+            'xacro',
+            'ld250_tm12x.urdf.xacro',
+        )
+    )
+    robot_description = {'robot_description': robot_description_config.toxml()}
 
 
     # SRDF Configuration
