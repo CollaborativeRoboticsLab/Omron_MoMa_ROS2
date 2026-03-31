@@ -13,8 +13,6 @@ RUN groupadd --gid $USER_GID $USERNAME \
 RUN apt-get update && apt-get upgrade -y \
     && rm -rf /var/lib/apt/lists/*
 
-RUN python -m pip config set global.break-system-packages true
-
 RUN apt-get update && apt-get install --no-install-recommends -y \
     sudo \
     git \
@@ -59,6 +57,9 @@ RUN git clone https://github.com/CollaborativeRoboticsLab/omron_amr.git -b devel
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git -b develop
 
 # Install python packages
+
+RUN python -m pip config set global.break-system-packages true
+
 RUN pip3 install --no-cache-dir pymodbus
 
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
