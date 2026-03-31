@@ -1,5 +1,6 @@
 import sys
 import os
+import xacro
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
@@ -16,6 +17,11 @@ def load_file(package_name, file_path):
             return file.read()
     except EnvironmentError:  # parent of IOError, OSError *and* WindowsError where available
         return ''
+
+
+def load_robot_description(package_name, file_path):
+    absolute_file_path = os.path.join(get_package_share_directory(package_name), file_path)
+    return xacro.process_file(absolute_file_path).toxml()
 
 
 def _is_enabled(context, name):
@@ -55,7 +61,9 @@ def _create_hardware_actions(context, tm_robot_ip, tm_use_simulation, robot_desc
         )
 
     if override_enabled:
-        robot_description = {'robot_description': load_file('moma_description', 'urdf/ld250_tm12x.urdf')}
+        robot_description = {
+            'robot_description': load_robot_description('moma_description', 'xacro/ld250_tm12x.urdf.xacro')
+        }
         actions.append(
             Node(
                 package='robot_state_publisher',
