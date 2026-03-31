@@ -10,6 +10,13 @@ This repository allows controlling the Base, Arm and Gripper of the Omron Mobile
 
 For supported features and limitations, see the individual repositories on the features supported by the MoMa.
 
+## Device Configuration
+
+The robot expects the remote PC to be configured with the following IP address to connect to the robot,
+
+IP Address : 192.168.1.50
+Subnet Mask : 255.255.255.0
+
 ## Setup
 
 Create a workspace
@@ -42,6 +49,7 @@ finally build by
 cd ..
 colcon build
 ```
+
 **or save time and use devcontainer** 
 
 ## Usage
@@ -60,11 +68,18 @@ source install/setup.bash
 ros2 launch moma_ros ld250_tm12x.launch.py use_rviz:=true
 ```
 
-### Start the system with arm in simulation mode
+### Start the system without Nav2 or Moveit to evaluate the Hardware connection
 
 ```bash
 source install/setup.bash
-ros2 launch moma_ros ld250_tm12x.launch.py tm_use_simulation:=true
+ros2 launch moma_ros ld250_tm12x.launch.py use_nav2:=false use_moveit:=false
+```
+
+### Start the system without Nav2 to control just the Arm and Gripper using RVIZ
+
+```bash
+source install/setup.bash
+ros2 launch moma_ros ld250_tm12x.launch.py use_nav2:=false use_rviz:=true
 ```
 
 ## Docker

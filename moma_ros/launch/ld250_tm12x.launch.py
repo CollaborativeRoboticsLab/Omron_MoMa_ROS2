@@ -77,6 +77,9 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(moma_ros_share, 'launch', 'ld250_tm12x', 'ld250_tm12x.rviz.launch.py')
         ),
+        launch_arguments={
+            'use_moveit': use_moveit,
+        }.items(),
         condition=IfCondition(use_rviz)
     )
 
