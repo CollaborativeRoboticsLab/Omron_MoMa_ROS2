@@ -21,6 +21,7 @@ ENV USE_MOVEIT=true
 ENV USE_NAV2=true
 ENV ARM_USE_SIMULATION=false
 
+RUN python -m pip config set global.break-system-packages true
 
 #############################################################################################################################
 #####
