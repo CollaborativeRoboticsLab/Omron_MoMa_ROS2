@@ -52,6 +52,7 @@ WORKDIR /home/$USERNAME/colcon_ws/src
 RUN git clone https://github.com/CollaborativeRoboticsLab/tmr_ros2.git -b develop
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_amr.git -b develop
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git -b develop
+RUN git clone https://github.com/CollaborativeRoboticsLab/libaria.git
 
 # Install python packages
 RUN pip3 install --no-cache-dir --break-system-packages pymodbus
