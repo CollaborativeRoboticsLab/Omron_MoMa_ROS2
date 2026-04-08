@@ -137,27 +137,39 @@
     <parent link="$(arg base_prefix)base_link"/>
     <child link="controlbox"/>
     <!-- <origin xyz="0.2 0 0.34" rpy="0 0 0"/> -->
-    <origin xyz="0 0 0.34" rpy="0 0 0"/>
+    <origin xyz="0 0 0.38" rpy="0 0 0"/>
   </joint>
 
   <!-- Mount the TM12x base to TM12x control box base -->
   <joint name="controlbox_to_tm12x_mount" type="fixed">
     <parent link="controlbox"/>
     <child link="$(arg arm_prefix)base"/>
-    <origin xyz="0.2 0 0.325" rpy="0 0 0"/>
+    <origin xyz="0.21 0 0.33" rpy="0 0 0"/>
   </joint>
 
   <!--
-    Dimensions:
-    - base length: 950 mm
-    - base width: 696 mm
-    - base height: 340 mm
-    - arm base offset front: 175 mm
-    - arm base offset back: 570 mm
-    - arm base offset left: 245 mm
-    - arm base offset right: 250 mm
+    Dimensions (from https://files.omron.eu/downloads/latest/datasheet/en/i828_ld-series_mobile_robot_datasheet_en.pdf?v=2):
+    - length: 970 mm
+    - width: 720 mm
+    - base height: 380 mm
+    - laser glass center height: 190 mm
+
+    Dimensions roughly measured
+    - laser glass offset front: 35 mm
+    - laser glass offset back: 135 mm
+
+    - arm base front from robot front: 180 mm
+    - arm base back from robot front: 380 mm
+    - arm base left from robot left: 245 mm
+    - arm base right from robot right: 250 mm
     - arm base bottom from ld250 top: 320 mm
+
     - control box height: 325 mm
     - control box center to arm base: 198 mm
+
+    Calaculated from the above dimensions:
+    - arm center from the middle of the robot: (970/2 - 380 + (380-180)/2) mm
+                                             : (485 - 380 + 100) mm
+                                             : 205 mm
   -->
 </robot>
