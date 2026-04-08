@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     ros-${ROS_DISTRO}-joint-state-publisher-gui \
     ros-${ROS_DISTRO}-vision-opencv \
     ros-${ROS_DISTRO}-teleop-twist-joy \
+    ros-${ROS_DISTRO}-teleop-twist-keyboard \
     ros-${ROS_DISTRO}-joy \
     ros-${ROS_DISTRO}-rqt-tf-tree \
     && rm -rf /var/lib/apt/lists/*
