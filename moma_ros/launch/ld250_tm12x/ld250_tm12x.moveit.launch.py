@@ -40,7 +40,7 @@ def generate_launch_description():
 
 
     # SRDF Configuration
-    robot_description_semantic_config = load_file('tm12x_moveit_config'  , 'config/ld250_tm12x.srdf')
+    robot_description_semantic_config = load_file('moma_ros'  , 'config/ld250_tm12x.srdf')
     robot_description_semantic = {'robot_description_semantic': robot_description_semantic_config}
 
     # Kinematics
