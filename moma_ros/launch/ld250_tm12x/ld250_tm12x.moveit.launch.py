@@ -40,7 +40,7 @@ def generate_launch_description():
 
 
     # SRDF Configuration
-    robot_description_semantic_config = load_file('moma_ros'  , 'config/ld250_tm12x.srdf')
+    robot_description_semantic_config = load_file('ld250_tm12x_moveit_config', 'config/ld250_tm12x.srdf')
     robot_description_semantic = {'robot_description_semantic': robot_description_semantic_config}
 
     # Kinematics
@@ -50,27 +50,17 @@ def generate_launch_description():
 
     # Planning Configuration
     ompl_planning_pipeline_config = {
-        'planning_pipelines': ['ompl'],
-        'ompl': {
-            'planning_plugin': 'ompl_interface/OMPLPlanner',
-            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization 
-                                   default_planner_request_adapters/FixWorkspaceBounds 
-                                   default_planner_request_adapters/FixStartStateBounds 
-                                   default_planner_request_adapters/FixStartStateCollision 
-                                   default_planner_request_adapters/FixStartStatePathConstraints""",
-            'start_state_max_bounds_error': 0.1,
-        },
+        'planning_pipelines': ['ompl', 'pilz_industrial_motion_planner', 'chomp'],
+        'default_planning_pipeline': 'ompl',
+        'ompl': load_yaml('tm12x_moveit_config', 'config/ompl_planning.yaml'),
+        'pilz_industrial_motion_planner': load_yaml(
+            'tm12x_moveit_config', 'config/pilz_industrial_motion_planner_planning.yaml'
+        ),
+        'chomp': load_yaml('tm12x_moveit_config', 'config/chomp_planning.yaml'),
     }
-
-    ompl_planning_yaml = load_yaml('tm12x_moveit_config'  , 'config/ompl_planning.yaml')
-    ompl_planning_pipeline_config['ompl'].update(ompl_planning_yaml)
 
     # Trajectory Execution Configuration -> Controllers
-    controllers_yaml = load_yaml('tm12x_moveit_config', 'config/controllers.yaml')
-    moveit_controllers = {
-        'moveit_simple_controller_manager': controllers_yaml, 
-        'moveit_controller_manager': 'moveit_simple_controller_manager/MoveItSimpleControllerManager'
-    }
+    moveit_controllers = load_yaml('tm12x_moveit_config', 'config/moveit_controllers.yaml')
 
     # Trajectory Execution Functionality
     trajectory_execution = {
@@ -89,11 +79,9 @@ def generate_launch_description():
     }
 
     # Joint limits
-    joint_limits_yaml = {
-        'robot_description_planning': load_yaml(
-            'tm12x_moveit_config', 'config/joint_limits.yaml'
-        )
-    }
+    joint_limits = load_yaml('tm12x_moveit_config', 'config/joint_limits.yaml')
+    joint_limits.update(load_yaml('tm12x_moveit_config', 'config/pilz_cartesian_limits.yaml'))
+    joint_limits_yaml = {'robot_description_planning': joint_limits}
 
     # Start the actual move_group node/action server
     run_move_group_node = Node(

@@ -52,17 +52,14 @@ def generate_launch_description():
     robot_description = {'robot_description': robot_description_config.toxml()}
 
     # SRDF Configuration
-    robot_description_semantic_config = load_file('moma_ros'  , 'config/ld250_tm12x.srdf')
+    robot_description_semantic_config = load_file('ld250_tm12x_moveit_config', 'config/ld250_tm12x.srdf')
     robot_description_semantic = {'robot_description_semantic': robot_description_semantic_config}
 
     # Planning Configuration
     ompl_planning_pipeline_config = {
         'planning_pipelines': ['ompl'],
-        'ompl': {
-            'planning_plugin': 'ompl_interface/OMPLPlanner',
-            'request_adapters': """default_planner_request_adapters/AddTimeOptimalParameterization default_planner_request_adapters/FixWorkspaceBounds default_planner_request_adapters/FixStartStateBounds default_planner_request_adapters/FixStartStateCollision default_planner_request_adapters/FixStartStatePathConstraints""",
-            'start_state_max_bounds_error': 0.1,
-        },
+        'default_planning_pipeline': 'ompl',
+        'ompl': load_yaml('tm12x_moveit_config', 'config/ompl_planning.yaml'),
     }
 
     # Kinematics
@@ -74,7 +71,9 @@ def generate_launch_description():
     nav2_rviz_cfg = PathJoinSubstitution([FindPackageShare('moma_ros'), 'rviz', 'ld250_tm12x-nav2.rviz'])
 
     # Joint limits
-    joint_limits_yaml = {'robot_description_planning': load_yaml('tm12x_moveit_config', 'config/joint_limits.yaml')}
+    joint_limits = load_yaml('tm12x_moveit_config', 'config/joint_limits.yaml')
+    joint_limits.update(load_yaml('tm12x_moveit_config', 'config/pilz_cartesian_limits.yaml'))
+    joint_limits_yaml = {'robot_description_planning': joint_limits}
 
     # RViz
     moveit_rviz_node = Node(
