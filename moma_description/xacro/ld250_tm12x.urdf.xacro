@@ -11,6 +11,8 @@
   <xacro:arg name="arm_base_link" default="base_link"/>
   <xacro:arg name="controlbox_mesh_pkg" default="moma_description"/>
 
+  <xacro:macro name="ld250_tm12x_robot" params="ns:='' arm_prefix:='' base_prefix:='' arm_color:='none' trans_hw_iface:='hardware_interface/PositionJointInterface' arm_base_link:='base_link' controlbox_mesh_pkg:='moma_description'">
+
   <!-- =============================================================== -->
   <!--                   LD250 related configuration                   -->
   <!-- =============================================================== -->
@@ -20,7 +22,7 @@
   <xacro:include filename="$(find moma_description)/xacro/controlbox_ld250.urdf.xacro"/>
   
   <!-- LD250 mobile base -->
-  <xacro:ld250 prefix="$(arg base_prefix)" mesh_pkg="amr_description"/>
+  <xacro:ld250 prefix="${base_prefix}" mesh_pkg="amr_description"/>
 
   <!-- =============================================================== -->
   <!--                   TM12x related configuration                   -->
@@ -31,7 +33,7 @@
   <xacro:include filename="$(find tm_description)/xacro/macro.transmission.xacro" />
   <xacro:include filename="$(find tm_description)/xacro/macro.tm12x-nominal.urdf.xacro" />
 
-  <xacro:property name="arm_color_val" value="$(arg arm_color)"/>
+  <xacro:property name="arm_color_val" value="${arm_color}"/>
   <xacro:property name="tm_effective_arm_color" value="${
     'moma_tm_none' if arm_color_val == 'none' else
     'moma_tm_lightgrey' if arm_color_val == 'lightgrey' else
@@ -90,24 +92,24 @@
   </material>
 
   <!-- TM12x arm (gazebo/transmission/material macros) -->
-  <xacro:tmr_gazebo ns="$(arg ns)" prefix="$(arg arm_prefix)" />
-  <xacro:tmr_transmission prefix="$(arg arm_prefix)" hw_iface="$(arg trans_hw_iface)" />
+  <xacro:tmr_gazebo ns="${ns}" prefix="${arm_prefix}" />
+  <xacro:tmr_transmission prefix="${arm_prefix}" hw_iface="${trans_hw_iface}" />
 
   <!-- TM12x geometry -->
   <!-- If the arm color is 'none' -->
   <xacro:if value="${arm_color_val == 'none'}">
-    <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)" color="${tm_effective_arm_color}"/>
+    <xacro:tm12x ns="${ns}" prefix="${arm_prefix}" color="${tm_effective_arm_color}"/>
   </xacro:if>
   <!-- If the arm color is not 'none', include the colored version -->
   <xacro:unless value="${arm_color_val == 'none'}">
-    <xacro:tm12x ns="$(arg ns)" prefix="$(arg arm_prefix)" color="${tm_effective_arm_color}" format="stl"/>
+    <xacro:tm12x ns="${ns}" prefix="${arm_prefix}" color="${tm_effective_arm_color}" format="stl"/>
   </xacro:unless>
 
   <!-- =============================================================== -->
   <!--             TM12x Control box related configuration             -->
   <!-- =============================================================== -->
 
-  <xacro:controlbox_ld250 mesh_pkg="$(arg controlbox_mesh_pkg)" link_name="controlbox"/>
+  <xacro:controlbox_ld250 mesh_pkg="${controlbox_mesh_pkg}" link_name="controlbox"/>
 
   <!-- =============================================================== -->
   <!--                Joint Connection configuration                   -->
@@ -115,7 +117,7 @@
 
   <!-- Mount the TM12x control box base to the LD250 base_link -->
   <joint name="ld250_to_controlbox" type="fixed">
-    <parent link="$(arg base_prefix)base_link"/>
+    <parent link="${base_prefix}base_link"/>
     <child link="controlbox"/>
     <origin xyz="0 0 0.38" rpy="0 0 0"/>
   </joint>
@@ -123,7 +125,7 @@
   <!-- Mount the TM12x base to TM12x control box base -->
   <joint name="controlbox_to_tm12x_mount" type="fixed">
     <parent link="controlbox"/>
-    <child link="$(arg arm_prefix)base"/>
+    <child link="${arm_prefix}base"/>
     <origin xyz="0.2 0 0.325" rpy="0 0 0"/>
   </joint>
 
@@ -140,4 +142,15 @@
     - control box height: 325 mm
     - control box center to arm base: 198 mm
   -->
+
+  </xacro:macro>
+
+  <xacro:ld250_tm12x_robot
+    ns="$(arg ns)"
+    arm_prefix="$(arg arm_prefix)"
+    base_prefix="$(arg base_prefix)"
+    arm_color="$(arg arm_color)"
+    trans_hw_iface="$(arg trans_hw_iface)"
+    arm_base_link="$(arg arm_base_link)"
+    controlbox_mesh_pkg="$(arg controlbox_mesh_pkg)" />
 </robot>
