@@ -72,18 +72,20 @@ When updating the mounted robot model, keep the arm-specific tuning in `tmXXX_mo
 
 ## Usage
 
+`ld250_tm12x.launch.py` now treats `use_rviz:=true` as the default behavior. In practice that means RViz starts automatically when MoveIt is enabled, and you only need to set `use_rviz:=false` for headless runs.
+
 ### Start the system headless
 
 ```bash
 source install/setup.bash
-ros2 launch moma_ros ld250_tm12x.launch.py
+ros2 launch moma_ros ld250_tm12x.launch.py use_rviz:=false
 ```
 
 ### Start the system with RVIZ
 
 ```bash
 source install/setup.bash
-ros2 launch moma_ros ld250_tm12x.launch.py use_rviz:=true
+ros2 launch moma_ros ld250_tm12x.launch.py
 ```
 
 ### Start the system without Nav2 or Moveit to evaluate the Hardware connection
@@ -97,7 +99,7 @@ ros2 launch moma_ros ld250_tm12x.launch.py use_nav2:=false use_moveit:=false
 
 ```bash
 source install/setup.bash
-ros2 launch moma_ros ld250_tm12x.launch.py use_nav2:=false use_rviz:=true
+ros2 launch moma_ros ld250_tm12x.launch.py use_nav2:=false
 ```
 
 ## Docker

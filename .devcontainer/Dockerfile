@@ -52,8 +52,8 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc
 # make sure folders exist
 WORKDIR /home/$USERNAME/colcon_ws/src 
 
-RUN git clone https://github.com/CollaborativeRoboticsLab/omron_arm.git -b develop
-RUN git clone https://github.com/CollaborativeRoboticsLab/omron_base.git -b develop
+RUN git clone https://github.com/CollaborativeRoboticsLab/tmr_ros2.git -b humble
+RUN git clone --recurse-submodules https://github.com/CollaborativeRoboticsLab/omron_amr.git -b humble
 RUN git clone https://github.com/CollaborativeRoboticsLab/omron_gripper.git -b develop
 
 # Install python packages

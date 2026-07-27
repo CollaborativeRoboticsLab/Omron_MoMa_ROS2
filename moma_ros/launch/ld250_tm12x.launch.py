@@ -2,7 +2,7 @@ import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python.packages import get_package_share_directory
 
@@ -30,8 +30,8 @@ def generate_launch_description():
 
     declare_use_rviz = DeclareLaunchArgument(
         'use_rviz',
-        default_value='false',
-        description='Whether to start RViz (true/false)'
+        default_value='auto',
+        description='Whether to start RViz (true/false/auto). auto starts RViz when MoveIt is enabled.'
     )
 
     declare_use_moveit = DeclareLaunchArgument(
@@ -80,7 +80,12 @@ def generate_launch_description():
         launch_arguments={
             'use_moveit': use_moveit,
         }.items(),
-        condition=IfCondition(use_rviz)
+        condition=IfCondition(
+            PythonExpression([
+                '"', use_rviz, '" == "true" or '
+                '("', use_rviz, '" == "auto" and "', use_moveit, '" == "true")'
+            ])
+        )
     )
 
     return LaunchDescription([
