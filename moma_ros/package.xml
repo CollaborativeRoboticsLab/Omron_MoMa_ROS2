@@ -10,6 +10,7 @@
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>amr_ros</exec_depend>
+  <exec_depend>amr_teleop</exec_depend>
   <exec_depend>ld250_tm12x_moveit_config</exec_depend>
   <exec_depend>moma_description</exec_depend>
   <exec_depend>moveit_ros_move_group</exec_depend>
